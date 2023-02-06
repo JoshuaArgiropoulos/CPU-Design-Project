@@ -1,34 +1,8 @@
 module MDMux(input [31:0] BusMuxOut, input [31:0] Mdatain, input Read, output [31:0] MDMuxOutput);
   always @(*) begin
-      case (sel)
-         5'b00000 : mux_out = Mdatain[0];
-         5'b00001 : mux_out = Mdatain[1];
-         5'b00010 : mux_out = Mdatain[2];
-         5'b00000 : mux_out = Mdatain[3];
-         5'b00000 : mux_out = data_in[4];
-         5'b00000 : mux_out = data_in[5];
-         5'b00000 : mux_out = data_in[6];
-         5'b00000 : mux_out = data_in[7];
-         5'b00000 : mux_out = data_in[8];
-         5'b00000 : mux_out = data_in[9];
-         5'b00000 : mux_out = data_in[10];
-         5'b00000 : mux_out = data_in[11];
-         5'b00000 : mux_out = data_in[12];
-         5'b00000 : mux_out = data_in[13];
-         5'b00000 : mux_out = data_in[14];
-         5'b00000 : mux_out = data_in[15];
-         5'b00000 : mux_out = data_in[16];
-         5'b00000 : mux_out = data_in[17];
-         5'b00000 : mux_out = data_in[18];
-         5'b00000 : mux_out = data_in[19];
-         5'b00000 : mux_out = data_in[20];
-         5'b00000 : mux_out = data_in[21];
-         5'b00000 : mux_out = data_in[22];
-         5'b00000 : mux_out = data_in[23];
-         5'b00000 : mux_out = data_in[24];
-         5'b00000 : mux_out = data_in[25];
-         5'b00000 : mux_out = data_in[26];
-         5'b00000 : mux_out = data_in[27];
-         
-         5'b11111 : mux_out = data_in[31];
+      case (read)
+         1'b0 : MDMuxOutput = BusMuxOut;
+         1'b1 : MDMuxOutput = Mdatain;
       endcase
+   end
+endmodule
