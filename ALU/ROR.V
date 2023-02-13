@@ -1,3 +1,4 @@
+//rotate right (ROR)
 module ROR(
   input wire [31:0] operand, // The 32-bit operand to be rotated
   input wire [4:0] rotate_amount, // The number of bits to rotate
