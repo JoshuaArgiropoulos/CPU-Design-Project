@@ -1,7 +1,7 @@
 `timescale 1ns/10ps
 module ConnectedBusTB;
 
-reg clk = 0;
+//reg clk;
 /*
 
 reg enable = 1;
@@ -37,8 +37,10 @@ reg [31:0]				EncodeIn,
 							BusMuxInPc,
 							BusMuxInMDR,
 							BusMuxInInPort,
-							CSignExtended,
-							BusMuxOut;
+							CSignExtended;
+							
+wire [31:0] BusMuxOut;
+							
 wire [4:0]				EncodeOut;
 
 ConnectedBus cb_inst(EncodeIn,
@@ -66,20 +68,19 @@ ConnectedBus cb_inst(EncodeIn,
 							BusMuxInMDR,
 							BusMuxInInPort,
 							CSignExtended,
-							BusMuxOut,
-							EncodeOut);
-							// 
+							BusMuxOut);
 							
-always #10 clk = !clk;
+							
+
 
 initial begin
+	//clk = 0;
+	EncodeIn <= 1;
 	
-	EncodeIn = 1;
-	#10
-	BusMuxInHI = 1;
-	#10
-	BusMuxInHI = 0;
+	BusMuxInR0 <= 32'b00000000001011000011000000000011;
+	//forever #10 clk = ~clk;
 	
+		
 end
 
 endmodule
