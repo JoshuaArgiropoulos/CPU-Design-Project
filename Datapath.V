@@ -13,26 +13,26 @@ module Datapath (
     reg [31:0] Lo;
     
     // Modules
-    Register PC(clk, reset, PC);
-    Register IR(clk, reset, IR);
+    Register PC(clk, clr, enable, PC);
+    Register IR(clk, clr, enable, IR);
   
-    Register R0(clk, reset, R[0]);
-    Register R1(clk, reset, R[1]);
-    Register R2(clk, reset, R[2]);
-    Register R3(clk, reset, R[3]);
-    Register R4(clk, reset, R[4]);
-    Register R5(clk, reset, R[5]);
-    Register R6(clk, reset, R[6]);
-    Register R7(clk, reset, R[7]);
-    Register R8(clk, reset, R[8]);
-    Register R9(clk, reset, R[9]);
+    Register R0(clk, clr, enable, R[0]);
+    Register R1(clk, clr, enable, R[1]);
+    Register R2(clk, clr, enable, R[2]);
+    Register R3(clk, clr, enable, R[3]);
+    Register R4(clk, clr, enable, R[4]);
+    Register R5(clk, clr, enable, R[5]);
+    Register R6(clk, clr, enable, R[6]);
+    Register R7(clk, clr, enable, R[7]);
+    Register R8(clk, clr, enable, R[8]);
+    Register R9(clk, clr, enable, R[9]);
   
-    Register R10(clk, reset, R[10]);
-    Register R11(clk, reset, R[11]);
-    Register R12(clk, reset, R[12]);
-    Register R13(clk, reset, R[13]);
-    Register R14(clk, reset, R[14]);
-    Register R5(clk, reset, R[15]);
+    Register R10(clk, clr, enable, R[10]);
+    Register R11(clk, clr, enable, R[11]);
+    Register R12(clk, clr, enable, R[12]);
+    Register R13(clk, clr, enable, R[13]);
+    Register R14(clk, clr, enable, R[14]);
+    Register R5(clk, clr, enable, R[15]);
 
   
   
