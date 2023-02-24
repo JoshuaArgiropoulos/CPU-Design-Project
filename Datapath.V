@@ -1,6 +1,6 @@
 module Datapath (
     input clk,
-    input reset,
+    input clr,
     input [31:0] inPort,
     output [31:0] outPort
 );
