@@ -37,7 +37,7 @@ module Datapath (
     Register R12(clk, clr, enable, R[12]);
     Register R13(clk, clr, enable, R[13]);
     Register R14(clk, clr, enable, R[14]);
-    Register R5(clk, clr, enable, R[15]);
+    Register R15(clk, clr, enable, R[15]);
 
   
   
@@ -48,7 +48,7 @@ module Datapath (
     
     MDMux MuxReg(.inputD(RegBus.out), .clr(reset), .clk(clk), .enable(IR[20]), .outputQ(R[IR[15:11]]));
     
-    MDR MdrReg(clk, reset, MuxReg.out);
+    MDR MdrReg(MuxReg.out, clr, clk, enable);
     
    addsub AddSub(clk, reset, MdrReg.out1, MdrReg.out2, IR[5], outPort);
     andOp AndOp(clk, reset, MdrReg.out1, MdrReg.out2, outPort);
