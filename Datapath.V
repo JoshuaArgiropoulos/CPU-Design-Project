@@ -46,7 +46,7 @@ module Datapath (
 
     ConnectedBus BusInst(inPort, R[0], R[1], R[2], R[3], R[4], R[5], R[6], R[7], R[8], R[9], R[10], R[11], R[12], R[13], R[14], R[15], Hi, Lo, Hi, Lo, PC, IR, inPort, SignExtended, BusMuxOut, EncodeOut);
     
-    MDMux MuxReg(.inputD(BusInst.RegBusOut), .clr(clr), .clk(clk), .enable(IR[20]), .outputQ(R[IR[15:11]]));
+    MDMux MDMux_inst(BusMuxOut, inPort, enable, MDMuxOutput);
     
     MDR MdrReg(MuxReg.outputQ, clr, clk, enable);
     
