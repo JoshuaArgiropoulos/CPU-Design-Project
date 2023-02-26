@@ -16,6 +16,7 @@ module Datapath (
     wire [4:0] EncodeOut;
     wire [31:0] BusMuxOut;
     wire [31:0] SignExtended;
+    wire [31:0] ALUResult;
     
     // Modules
     Register PC(clk, clr, enable, PC);
@@ -39,31 +40,16 @@ module Datapath (
     Register R14(clk, clr, enable, R[14]);
     Register R15(clk, clr, enable, R[15]);
 
-  
-  
-  
-  
-  
+    // Instantiate ALU module
+    ALU alu_inst(R[IR[20:16]], BusMuxOut, IR[5:0], ALUResult);
+
     ConnectedBus BusInst(inPort, R[0], R[1], R[2], R[3], R[4], R[5], R[6], R[7], R[8], R[9], R[10], R[11], R[12], R[13], R[14], R[15], Hi, Lo, Hi, Lo, PC, IR, inPort, SignExtended, BusMuxOut, EncodeOut);
     
     MDMux MuxReg(.inputD(RegBus.out), .clr(reset), .clk(clk), .enable(IR[20]), .outputQ(R[IR[15:11]]));
     
     MDR MdrReg(MuxReg.out, clr, clk, enable);
     
-   addsub AddSub(clk, reset, MdrReg.out1, MdrReg.out2, IR[5], outPort);
-    andOp AndOp(clk, reset, MdrReg.out1, MdrReg.out2, outPort);
-    add AddOp(clk, reset, MdrReg.out1, MdrReg.out2, outPort);
-    sub SubOp(clk, reset, MdrReg.out1, MdrReg.out2, outPort);
-    mul MulOp(clk, reset, MdrReg.out1, MdrReg.out2, Hi, Lo);
-    div DivOp(clk, reset, MdrReg.out1, MdrReg.out2, Hi, Lo);
-    and AndOp(clk, reset, MdrReg.out1, MdrReg.out2, outPort);
-    or OrOp(clk, reset, MdrReg.out1, MdrReg.out2, outPort);
-    shr ShrOp(clk, reset, MdrReg.out1, IR[10:6], outPort);
-    shra ShraOp(clk, reset, MdrReg.out1, IR[10:6], outPort);
-    shl ShlOp(clk, reset, MdrReg.out1, IR[10:6], outPort);
-    ror RorOp(clk, reset, MdrReg.out1, IR[10:6], outPort);
-    rol RolOp(clk, reset, MdrReg.out1, IR[10:6], outPort);
-    neg NegOp(clk, reset, MdrReg.out1, outPort);
-    not NotOp(clk, reset, MdrReg.out1, outPort);
+    // Output the result of ALU to outPort
+    assign outPort = ALUResult;
 
 endmodule
