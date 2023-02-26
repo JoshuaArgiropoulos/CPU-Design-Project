@@ -43,7 +43,7 @@ module Datapath (
     Register R15_inst(clk, clr, enable, R[15]);
 
     // Instantiate ALU module
-    ALU ALU_inst(R[IR[20:16]], BusMuxOut, IR[5:0], ALUResult);
+    ALU ALU_inst(R[IR[25:21]], MDMuxOutput, IR[5:0]);
 
     ConnectedBus BusInst(inPort, R[0], R[1], R[2], R[3], R[4], R[5], R[6], R[7], R[8], R[9], R[10], R[11], R[12], R[13], R[14], R[15], Hi, Lo, PC, IR, inPort, SignExtended, BusMuxOut, EncodeOut);
 
@@ -52,6 +52,6 @@ module Datapath (
     MDR MdrReg(MDMuxOutput, clr, clk, enable);
 
     // Output the result of ALU to outPort
-    assign outPort = ALUResult;
+    assign outPort = ALU_inst.Output;
 
 endmodule
