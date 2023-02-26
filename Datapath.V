@@ -52,6 +52,6 @@ module Datapath (
     MDR MdrReg(MDMuxOutput, clr, clk, enable);
 
     // Output the result of ALU to outPort
-    assign outPort = ALU_inst.Output;
+    assign outPort = ALU_inst.result;
 
 endmodule
