@@ -9,7 +9,9 @@ module Datapath (
     // Registers
     reg [31:0] PC;
     reg [31:0] IR;
-    reg [31:0] R[15];
+    reg [31:0] R[15:0]; // fix size to 16
+
+    // Additional registers
     reg [31:0] Hi;
     reg [31:0] Lo;
 
@@ -24,23 +26,13 @@ module Datapath (
     Register PC_inst(clk, clr, enable, PC);
     Register IR_inst(clk, clr, enable, IR);
 
-    Register R0_inst(clk, clr, enable, R[0]);
-    Register R1_inst(clk, clr, enable, R[1]);
-    Register R2_inst(clk, clr, enable, R[2]);
-    Register R3_inst(clk, clr, enable, R[3]);
-    Register R4_inst(clk, clr, enable, R[4]);
-    Register R5_inst(clk, clr, enable, R[5]);
-    Register R6_inst(clk, clr, enable, R[6]);
-    Register R7_inst(clk, clr, enable, R[7]);
-    Register R8_inst(clk, clr, enable, R[8]);
-    Register R9_inst(clk, clr, enable, R[9]);
-
-    Register R10_inst(clk, clr, enable, R[10]);
-    Register R11_inst(clk, clr, enable, R[11]);
-    Register R12_inst(clk, clr, enable, R[12]);
-    Register R13_inst(clk, clr, enable, R[13]);
-    Register R14_inst(clk, clr, enable, R[14]);
-    Register R15_inst(clk, clr, enable, R[15]);
+    // Register module instantiation for R0 to R15
+    genvar i;
+    generate
+        for (i = 0; i < 16; i = i + 1) begin : REG_INST
+            Register reg_inst(clk, clr, enable, R[i]);
+        end
+    endgenerate
 
     // Instantiate ALU module
     ALU ALU_inst(R[IR[25:21]], MDMuxOutput, IR[5:0]);
@@ -51,7 +43,11 @@ module Datapath (
 
     MDR MdrReg(MDMuxOutput, clr, clk, enable);
 
-    // Output the result of ALU to outPort
-    assign outPort = ALU_inst.result;
+    // Connect the output of ALU to a wire
+    wire [31:0] ALUOutput;
+    assign ALUOutput = ALU_inst.result;
+
+    // Connect the wire to the outPort output
+    assign outPort = ALUOutput;
 
 endmodule
