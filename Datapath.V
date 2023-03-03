@@ -12,6 +12,7 @@ module Datapath (
     reg [31:0] R[15:0]; // fix size to 16
     reg MD_Read;
     reg Mdatain[31:0];
+    reg Control_Signals[3:0];
     // Additional registers
    // reg [31:0] Hi;
    // reg [31:0] Lo;
@@ -55,23 +56,13 @@ module Datapath (
     Register R15_inst(clk, clr, enable[15], BusMuxOut,R15_Out);
     
     // Instantiate ALU module
-    //LOOK TO FIX
-    ALU ALU_inst(Y_inst, BusMuxOut, IR[5:0], ALUOut);
+    
+    ALU ALU_inst(Y_inst, BusMuxOut, Control_Signals[3:0], ALUOut);
 
     ConnectedBus BusInst(inPort, R0_Out, R1_Out, R2_Out, R3_Out,R4_Out, R5_Out, R6_Out, R7_Out, R8_Out, R9_Out, R10_Out, R11_Out, R12_Out, R13_Out, R14_Out, R15_Out, Hi, Lo, PC, IR, inPort, SignExtended, BusMuxOut, EncodeOut);
-
-    //LOOK TO FIX
+    
     MDMux MDMux_inst(BusMuxOut, Mdatain, MD_Read, MDMuxOutput);
 
     MDR MdrReg(MDMuxOutput, clr, clk, enable, MDROut);
-
     
-//LOOK TO FIX
-    // Connect the output of ALU to a wire
-    wire [31:0] ALUOutput;
-    assign ALUOutput = ALU_inst.result;
-
-    // Connect the wire to the outPort output
-    assign outPort = ALUOutput;
-
 endmodule
