@@ -1,7 +1,7 @@
 module Datapath (
     input clk,
     input clr,
-    input enable,
+    input [31:0] enable,
     input [31:0] inPort,
     output [31:0] outPort
 );
@@ -50,7 +50,7 @@ module Datapath (
     Register R15_inst(clk, clr, enable, R[15]);
     
     // Instantiate ALU module
-    ALU ALU_inst(val;ue1, MDMuxOutput, IR[5:0], ALUOut);
+    ALU ALU_inst(Y_inst, MDMuxOutput, IR[5:0], ALUOut);
 
     ConnectedBus BusInst(inPort, R[0], R[1], R[2], R[3], R[4], R[5], R[6], R[7], R[8], R[9], R[10], R[11], R[12], R[13], R[14], R[15], Hi, Lo, PC, IR, inPort, SignExtended, BusMuxOut, EncodeOut);
 
