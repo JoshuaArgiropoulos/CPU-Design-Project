@@ -25,6 +25,11 @@ module Datapath (
     // Modules
     Register PC_inst(clk, clr, enable, PC);
     Register IR_inst(clk, clr, enable, IR);
+    
+    Register HI_inst(clk, clr, enable, Z_inst);
+    Register LO_inst(clk, clr, enable, Z_inst);
+    Register Y_inst(clk, clr, enable, inPort);
+    Register Z_inst(clk, clr, enable, ALUout);
 
     Register R0_inst(clk, clr, enable, R[0]);
     Register R1_inst(clk, clr, enable, R[1]);
