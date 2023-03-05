@@ -1,10 +1,10 @@
-module Register64bit(clk, clr, enable, D, Q);
+module Register64bit(clk, clr, enable, D, QH, QL);
 
 	input [63:0] D;
 	input clk, clr, enable;
 	reg [63:0] ra;
 	
-	output [63:0] Q;
+	output [31:0] QH, QL;
 	
 	always @(posedge clk) begin
 		if(clr)
@@ -12,6 +12,7 @@ module Register64bit(clk, clr, enable, D, Q);
 		else if(enable)
 			ra <= D;
 	end		
-	assign Q = ra;
+	assign QH = ra[63:32];
+	assign QL = ra[31:0];
 	
 endmodule
