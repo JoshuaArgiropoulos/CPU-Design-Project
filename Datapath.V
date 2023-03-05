@@ -1,14 +1,14 @@
 module Datapath (
-	 input [31:0] enable, busSelect, inPort, MDataIn
+	 input [31:0] enable, busSelect, inPort, MDataIn,
     input clk, clr, MR_Read,
-    input [3:0] control_Signals,
+    input [3:0] Control_Signals,
     output [31:0] busMuxOut
 );
 //LOOK TO FIX
     // Registers
     //reg [31:0] PC;
     //reg [31:0] IR;
-    reg [31:0] R[15:0]; // fix size to 16
+    //reg [31:0] R[15:0]; // fix size to 16
     //reg MD_Read;
     //reg Mdatain[31:0];
     //reg Control_Signals[3:0];
@@ -94,8 +94,8 @@ module Datapath (
 	 Register ZHI(clk, clr, enable[18], BusMuxOut, BusMuxIn_ZHI);
     Register ZLO(clk, clr, enable[19], BusMuxOut, BusMuxIn_ZLO);
 	 Register PC(clk, clr, enable[20], PC, BusMuxIn_PC);
-    Register MAR(clk, clr, enable, BusMuxOut, BusMuxIn_MDR);
-	 Register Y(clk, clr, enable, BusMuxOut, YOut);
+    //Register MAR(clk, clr, enable, BusMuxOut, BusMuxIn_MDR);
+	 
 	 
     // Instantiate ALU module
     
@@ -116,13 +116,14 @@ module Datapath (
     
     Register64bit Z(clk, clr, enable[24], ZOut, ZHI, ZLO);
 	 
-	 Register MAR(clk, clr, enable[25], busMuxOut;
-	 Register INPORT(clk, clr, enable[26], busMuxOut, BusMuxIn_OUTPORT);
+	 Register MAR(clk, clr, enable[25], busMuxOut);
+	 Register OUTPORT(clk, clr, enable[26], busMuxOut, BusMuxIn_OUTPORT);
+	 Register Y(clk, clr, enable[27], BusMuxOut, YOut);
 	 
 	 Bus dpBus(busSelect, BusMuxIn_R0, BusMuxIn_R1, BusMuxIn_R2, BusMuxIn_R3,
 	 BusMuxIn_R4, BusMuxIn_R5, BusMuxIn_R6, BusMuxIn_R7, BusMuxIn_R8,
 	 BusMuxIn_R9, BusMuxIn_R10, BusMuxIn_R11, BusMuxIn_R12, BusMuxIn_R13,
 	 BusMuxIn_R14, BusMuxIn_R15, BusMuxIn_HI, BusMuxIn_LO, BusMuxIn_ZHI,
-	 BusMuxIn_ZLO, BusMuxIn_PC, BusMuxIn_MDR, BusMuxIn_INPORT, CSignExtended, BusMuxOut)
+	 BusMuxIn_ZLO, BusMuxIn_PC, BusMuxIn_MDR, BusMuxIn_INPORT, CSignExtended, BusMuxOut);
 	 
 endmodule
