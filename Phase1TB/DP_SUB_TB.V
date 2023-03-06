@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module DP_OR_TB;
+module DP_SUB_TB;
 
 reg [31:0] enable, busSelect, inPort, MDataIn;
 reg clk, clr, MR_Read;
@@ -124,7 +124,7 @@ Clock = 0;
                 T4: begin
 			//R5 out, Z enable HI
 			#15 busSelect <= 3; enable <= 24;
-			Control_Signals <= 4'd4; // OR control signal 
+			Control_Signals <= 4'd2; // SUB control signal 
 			#15 busSelect <= 0;
 		
                 end
