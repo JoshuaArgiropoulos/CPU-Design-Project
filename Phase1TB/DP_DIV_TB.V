@@ -109,7 +109,7 @@ Clock = 0;
                 T4: begin
 			//R7 out, Z enable HI
 			#15 busSelect <= 7; enable <= 24;
-			Control_Signals <= 4'd12; // Mul control signal 
+			Control_Signals <= 4'd11; // Mul control signal 
 			#15 busSelect <= 0;
 		
                 end
