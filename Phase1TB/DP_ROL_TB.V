@@ -63,33 +63,33 @@ always @(Present_state) begin
                     
                     #15 MR_Read <= 1;
                     //Set MDR enable
-                    enable <=21;
+	     enable[21]<=1;
        
-                    #15 MR_Read <= 0; enable <= 0;
+	     #15 MR_Read <= 0; enable[21] <= 0;
                    
                 end
                 Reg_load1b: begin 
                   //MDR out and R3 enable are HI
-                    #15 busSelect <= 21; enable <= 3;
+			#15 busSelect[21] <= 1; enable[3] <= 1;
                   
-                    #15 busSelect <= 0; enable <= 0; 
+			#15 busSelect[21] <= 0; enable[3] <= 0; 
                 end
                 Reg_load2a: begin
                     Mdatain <= 32'h00000004; 
                     //Set MR_Read and MDR enable HI
-                    #15 MR_Read <= 1; enable <=21;
+			#15 MR_Read <= 1; enable[21] <=1;
                     
-                    #15 MR_Read <= 0; enable 0;
+			#15 MR_Read <= 0; enable[21] <= 0;
                   
                 end
                 Reg_load2b: begin 
                   
                   //MDR out and R5 enable HI
                   
-                    #15 busSelect <= 21; enable <= 5;
+			#15 busSelect[21] <= 1; enable[5] <= 1;
                   
                   
-                    #15 busSelect <= 0; enable <= 0; 
+			#15 busSelect[21] <= 0; enable[5] <= 0; 
                   
                 end
                 Reg_load3a: begin
@@ -97,62 +97,62 @@ always @(Present_state) begin
                   
                     //MR Read and MDR enable HI
                   
-                    #15 MR_Read <= 1; enable <=21;
+			#15 MR_Read <= 1; enable[21] <=1;
                   
-                    #15 MR_Read <= 0; enable <=0;
+			#15 MR_Read <= 0; enable[21] <=0;
                   
                 end
                 Reg_load3b: begin
                   //MDR out and R1 enable HI
-                  #15 busSelect <= 21; enable <=1;
+			#15 busSelec[21]<= 1; enable[1] <=1;
                   
-                  #15 busSelect <= 0; enable <=0;
+			#15 busSelect[21] <= 0; enable[1] <=0;
                     
                 end 
                 T0: begin
                   //PC Out, MAR enable increment PC and PC enable HI
-                  #15 busSelect <= 20; enable <= 25; enable <= 20; //IncPC ++
+			#15 busSelect[20] <= 1; enable[25] <= 1; enable[20] <= 1; //IncPC ++
                   
-                  #15 busSelect <= 0; enable 0;
+			#15 busSelect[20] <= 0; enable[25] <= 0; enable [20] <= 0;
                   
           
                 end
                 T1: begin
                   //Clears PC out, sets MDR enable and MR read HI
-                  #15 busSelect <= 0; enable <= 21; MR_Read <= 1; 
+			#15 busSelect[20] <= 0; enable[21] <= 1; MR_Read <= 1; 
 			            Mdatain <= 32'h389A8000; // opcode for shr R1, R3, R5
                   
                 end
                 T2: begin
                   //MDR Out and IR enable HI
-                  #15 busSelect <= 21; enable <= 23;
+			#15 busSelect[21] <= 1; enable[23] <= 1;
                   
-                   #15 busSelect <= 0;
+			#15 busSelect[21] <= 0;
                   
                 end
                 T3: begin
                   //R3 out and Y enable set HI
-                  #15 busSelect <= 3; enable <=27;
+			#15 busSelect[3] <= 1; enable[27] <=1;
 					
-                  #15 busSelect <= 0; enable <= 0;
+			#15 busSelect[3] <= 0; enable[27]<= 0;
                    
                 end
                 T4: begin
 			            //Set R5 out, Z enable HI
-			            #15 busSelect <= 5; enable <= 24;
+			#15 busSelect[5] <= 1; enable[24] <= 1;
 			            Control_Signals <= 4'd10;
 			            // ROL signal 
-		            	#15 busSelect <= 0;
+			#15 busSelect[5] <= 0;
                    
                 end
                 T5: begin
 			
-			enable <= 0; 
+			enable[24] <= 0; 
 			//Zlow out is HI
-			busSelect <= 19;
+			busSelect[19] <= 1;
 			//R1 enable is HI
-			#15 enable <= 1; 
-			#15 busSelect <= 0; enable <= 0;
+			#15 enable[1] <= 1; 
+			#15 busSelect[19] <= 0; enable[1] <= 0;
                     
                 end
             endcase
