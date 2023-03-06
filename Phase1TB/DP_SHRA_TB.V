@@ -127,7 +127,9 @@ Clock = 0;
 			#15 enable <= 0; busSelect <= 0;
 			
 			#15 busSelect <= 3; enable <= 24;//FIX
-			opcode <= 5'b01000; //SHRA
+			Control_Signals <= 4'd13;
+			// SHRA signal 
+			
 
                 end
                 T5: begin
