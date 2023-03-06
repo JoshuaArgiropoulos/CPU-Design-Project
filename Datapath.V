@@ -1,6 +1,6 @@
-module Datapath (
+module datapath (
 	 input [31:0] enable, busSelect, inPort, MDataIn,
-    input clk, clr, MR_Read,
+    input clk, clr, MD_Read, IncPC,
     input [3:0] Control_Signals,
     output [31:0] busMuxOut
 );
@@ -55,6 +55,7 @@ module Datapath (
 	 wire [31:0] BusMuxIn_INPORT;
 	 wire [31:0] BusMuxIn_OUTPORT;
 	 wire [31:0] CSignExtended;
+	 wire [31:0] MDROut;
 	 ///wire [31:0] internalALUOutZHI;
 	 //wire [31:0] internalALUOutZLO;
 	 //wire [31:0] internalBusMuxOut;
@@ -70,7 +71,7 @@ module Datapath (
 
     Register R0(clk, clr, enable[0], BusMuxOut, BusMuxIn_R0);
     Register R1(clk, clr, enable[1], BusMuxOut, BusMuxIn_R1);
-    Register R2(clk, clr, enable[2], BusMuxOut, BusMuxIn_R);
+    Register R2(clk, clr, enable[2], BusMuxOut, BusMuxIn_R2);
     Register R3(clk, clr, enable[3], BusMuxOut, BusMuxIn_R3);
     Register R4(clk, clr, enable[4], BusMuxOut, BusMuxIn_R4);
     Register R5(clk, clr, enable[5], BusMuxOut, BusMuxIn_R5);
@@ -93,13 +94,13 @@ module Datapath (
     Register LO(clk, clr, enable[17], BusMuxOut, BusMuxIn_LO);
 	 Register ZHI(clk, clr, enable[18], BusMuxOut, BusMuxIn_ZHI);
     Register ZLO(clk, clr, enable[19], BusMuxOut, BusMuxIn_ZLO);
-	 Register PC(clk, clr, enable[20], PC, BusMuxIn_PC);
+	 Register PC(clk, clr, enable[20], IncPC, BusMuxIn_PC);
     //Register MAR(clk, clr, enable, BusMuxOut, BusMuxIn_MDR);
 	 
 	 
     // Instantiate ALU module
     
-    ALU ALUPath(Y, BusMuxOut, Control_Signals[3:0], ZOut);
+    ALU ALUPath(YOut, BusMuxOut, Control_Signals[3:0], ZOut);
 	 
 
     //ConnectedBus BusInst(inPort, BusMuxIn_R0, R1_Out, R2_Out, R3_Out,R4_Out, R5_Out, R6_Out, R7_Out, R8_Out, R9_Out, R10_Out, R11_Out, R12_Out, R13_Out, R14_Out, R15_Out, Hi, Lo, PC, IR, inPort, SignExtended, BusMuxOut, EncodeOut);
@@ -114,13 +115,13 @@ module Datapath (
 	 //idk about these
 	 Register IR(clk, clr, enable[23], busMuxOut, BusMuxIn_IR);
     
-    Register64bit Z(clk, clr, enable[24], ZOut, ZHI, ZLO);
+    Register64bit Z(clk, clr, enable[24], ZOut, BusMuxIn_ZHI, BusMuxIn_ZLO);
 	 
 	 Register MAR(clk, clr, enable[25], busMuxOut);
 	 Register OUTPORT(clk, clr, enable[26], busMuxOut, BusMuxIn_OUTPORT);
 	 Register Y(clk, clr, enable[27], BusMuxOut, YOut);
 	 
-	 Bus dpBus(busSelect, BusMuxIn_R0, BusMuxIn_R1, BusMuxIn_R2, BusMuxIn_R3,
+	 ConnectedBus dpBus(busSelect, BusMuxIn_R0, BusMuxIn_R1, BusMuxIn_R2, BusMuxIn_R3,
 	 BusMuxIn_R4, BusMuxIn_R5, BusMuxIn_R6, BusMuxIn_R7, BusMuxIn_R8,
 	 BusMuxIn_R9, BusMuxIn_R10, BusMuxIn_R11, BusMuxIn_R12, BusMuxIn_R13,
 	 BusMuxIn_R14, BusMuxIn_R15, BusMuxIn_HI, BusMuxIn_LO, BusMuxIn_ZHI,
