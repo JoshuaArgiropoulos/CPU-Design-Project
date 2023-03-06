@@ -136,17 +136,20 @@ always @(Present_state) begin
                    
                 end
                 T4: begin
-                    #10 R5_out <= 1; 
-                    opcode <= 5'b00111; // shr R3 by Y(R5) then store in Z
-                    Z_enable <= 1; 
-                    #10 R5_out <= 0;
+			//Set R5 out, Z enable HI
+			#15 busSelect <= 5; enable <= 24;opcode <= 5'b00111; // shr R3 by Y(R5) then store in Z
+			#15 busSelect <= 0;
+                   
                 end
                 T5: begin
-				    Z_enable <= 0;
-                    ZLow_out <= 1; 
-                    #10 R1_enable <= 1;
-					#10 ZLow_out <= 0; 
-                    R1_enable <= 0;
+			
+			enable <= 0; 
+			//Zlow out is HI
+			busSelect <= 19;
+			//R1 enable is HI
+			#15 enable <= 1; 
+			#15 busSelect <= 0; enable <= 0;
+                    
                 end
             endcase
 
