@@ -1,144 +1,141 @@
 `timescale 1ns/10ps
-module DP_ADD_TB;
+module DP_AND_TB;
 
 reg [31:0] enable, busSelect, inPort, MDataIn;
-reg clk, clr, MR_Read;
-  reg [3:0] Control_Signals;
-wire [31:0] busMuxOut;
+reg clk, clr, MD_Read;
+reg [3:0] Control_Signals;
+wire [31:0] busMuxOut, r1, r2, r3, mdr, zhi, zlo, pc, hi, lo, temp;
+//wire [63:0] temp;
 
-parameter Default = 4'b0000, Reg_loadla = 4'b0001, Reg_loadlb = 4'b0010, Reg_load2a = 4'b0011, 
-             Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, TO = 4'b0111, 
-             Tl = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100; 
+parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011, 
+			 Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, T0 = 4'b0111, 
+			 T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100; 
 reg [3:0] Present_state = Default;
 
-     
+	 
 
-Datapath DUT(enable, busSelect, inPort, MDataIn, clk, clr, MD_Read, Control_Signals, busMuxOut); 
+datapath DUT(enable, busSelect, inPort, MDataIn, clk, clr, MD_Read, IncPC, Control_Signals, busMuxOut, r1, r2, r3, mdr, zhi, zlo, pc, hi, lo, temp); 
 
 initial begin
 
-Clock = 0;
-            forever #10 Clock = ~ Clock;
-        end
+clk = 0;
+forever #10 clk = ~clk;
 
-    always @(posedge Clock) // finite state machine; if clock rising-edge
-        begin
-            case (Present_state)
-                Default : Present_state = Reg_load1a;
-                Reg_load1a : Present_state = Reg_load1b;
-                Reg_load1b : Present_state = Reg_load2a;
-                Reg_load2a : Present_state = Reg_load2b;
-                Reg_load2b : Present_state = Reg_load3a;
-                Reg_load3a : Present_state = Reg_load3b;
-                Reg_load3b : Present_state = T0;
-                T0 : Present_state = T1;
-                T1 : Present_state = T2;
-                T2 : Present_state = T3;
-                T3 : Present_state = T4;
-                T4 : Present_state = T5;
-            endcase
-        end
+end
 
-    always @(Present_state) // do the required job in each state
-        begin
-            case (Present_state) // assert the required signals in each clock cycle
-                Default: begin
-                    
-                  enable <= 32'h00000000;
-                  budSelect <= 32'h00000000;
-                  inPort <= 32'h00000000;
-                  MDataIn<= 32'h00000000;
-                  clr <= 0; 
-                  MR_Read <= 0;
-                  Control_Signal <= 4'b0000;
-                  
-                  busMuxOut <= 32'h00000000;
-                  
-                end
-              Reg_load1a: begin 
-		      Mdatain <= 32'h0000003; //In binary 0011
-		      MR_Read <= 0; enable <= 0;
-		      //MR Read and MDR enable HI
-		      #15 MR_Read <= 1; enable[21] <= 1;
-		      #15 MR_Read <= 0; enable[21] <= 0;         
-               
-                end
-                Reg_load1b: begin 
-                  //MDR Out and r4 enable hi
-			#15 busSelect[21] <= 1; enable[4] <= 1;
-			#15 busSelect[21] <= 0; enable[4] <= 0;
-                  //initialize R4 with the value 3
-                end
-                Reg_load2a: begin
-                    Mdatain <= 32'h00000002; // Place 0010 into MdataIn
-                  //MR read and MDR enable hi
-			#15 MR_Read <= 1; enable[21] <= 1;
-			#15 MR_Read <= 0; enable[21] <= 0;
-                  
-                end
-                Reg_load2b: begin 
-                  //MDR out and R5 enable select HI
-			#15 busSelect[21] <= 1; enable[5] <= 1;
-			#15 busSelect[21] <= 0; enable[5] <= 0;
-                  //initialize R5 with the value 2
-                end
-		Reg_load3a: begin
-			Mdatain <= 32'h00000003; //00011
-			//MR_Read and MDR enable HI
-			#15 MR_Read <= 1; enable[21] <= 1;
-			#15 MR_Read <= 0; enable[21] <= 0;
-                 
-                end
-                Reg_load3b: begin 
-			//MDR Out and R1 enable HI
-			#15 busSelect[21] <= 1; enable[1] <= 1;
-			#15 busSelect[21] <= 0; enable[1] <= 0;
-			// initialize R1 with the value 3
-			
-                T0: begin
-                  //PC Out, MAR enable, PC enable and increment pc HI
-			#15 busSelect[20] <= 1; enable[25] <= 1 ; enable[20] <= 1; // INC PC ++
-			#15 busSelect[20] <= 0; enable[25] <= 0; enable[20] <= 0;
-                    
-					
-                end
-                T1: begin
-			//PC out to low, MDR enable and MR read to HI
-			busSelect[20] <= 0; enable[21] <= 1; MR_Read <= 1;
+always @(posedge clk) begin
+	case(Present_state)
+		Default : Present_state = Reg_load1a;
+		Reg_load1a :#40 Present_state = Reg_load1b;
+		Reg_load1b :#40 Present_state = Reg_load2a;
+		Reg_load2a :#40 Present_state = Reg_load2b;
+		Reg_load2b :#40 Present_state = Reg_load3a;
+		Reg_load3a :#40 Present_state = Reg_load3b;
+		Reg_load3b :#40 Present_state = T0;
+		T0 :#40 Present_state = T1;
+		T1 :#40 Present_state = T2;
+		T2 :#40 Present_state = T3;
+		T3 :#40 Present_state = T4;
+		T4 :#40 Present_state = T5;
+	endcase
+end
+
+always @(Present_state) begin
+
+	case(Present_state)
 	
-                    Mdatain <= 32'h7B380000; 
-			//Need to fix how to select R1 and R5 and R4
+	
+		Default: begin
+								busSelect <= 32'b0;
+								enable <= 32'b0;
+								MD_Read <= 0;
+								Control_Signals <= 4'b0;
+								MDataIn <= 32'h00000000;
+								inPort <= 32'd0;
+								clr <= 0;
+		end
+		Reg_load1a: begin
+								MDataIn <= 32'b0101;
+								MD_Read = 0; enable[21] = 0;
+								#10 MD_Read <= 1; enable[21] <= 1;
+								//MDataIn <= 32'b0011;
+								#15 MD_Read <= 0; enable[21] <= 0;				
+		end
+		Reg_load1b: begin
+								#10 busSelect[21] <= 1; enable[2] <= 1;
+								#15 busSelect[21] <= 0; enable[2] <= 0;
+		end
+		Reg_load2a: begin
+								MDataIn <= 32'b0110;
+								#10 MD_Read <= 1; enable[21] <= 1;
+								//MDataIn <= 32'b0010;
+								#15 MD_Read <= 0; enable[21] <= 0;	
+		end
+		Reg_load2b: begin
+								#10 busSelect[21] <= 1; enable[3] <= 1;
+								#15 busSelect[21] <= 0; enable[3] <= 0;
+		end
+		Reg_load3a: begin
+								MDataIn <= 32'b0;
+								#10 MD_Read <= 1; enable[21] <= 1;
+								//MDataIn <= 32'b0;
+								#15 MD_Read <= 0; enable[21] <= 0;	
+		end
+		Reg_load3b: begin
+								#10 busSelect[21] <= 1; enable[1] <= 1;
+								#15 busSelect[21] <= 0; enable[1] <= 0;
+		end
+		T0: begin
+								busSelect[20] <= 1;//PC
+								enable[25] <= 1;//MAR
+								enable[28] <= 1;//incPC bit is bit 28
+								enable[24] <= 1;//Zin
+								//#40
+								busSelect[20] <= 0;
+								enable[25] <= 0;//MAR
+								enable[28] <= 0;//incPC bit is bit 28
+								enable[24] <= 0;//Zin
+																
+		end
+		T1: begin
+								#10 busSelect[19] <= 1;
+								enable[20] <= 1;
+								MD_Read <= 1;
+								enable[21] <= 1;
+								MDataIn <= 32'h28918000;
+								#15 busSelect[19] <= 0;
+								busSelect[19] <= 0;
+								enable[20] <= 0;
+								MD_Read <= 0;
+								enable[21] <= 0;
+								
+		end
+		T2: begin
+								//busSelect[21] <= 1;
+								#10 busSelect[21] <= 1; enable[23] <= 1;
+								#15 busSelect[21] <= 0; enable[23] <= 0;
+								
+								
+		end
+		T3: begin
+								#10 busSelect[2] <= 1; enable[27] <= 1;
+								#15 busSelect[2] <= 0; enable[27] <= 0;
+		end
+		T4: begin
+								
+								#10 busSelect[3] <=1;
+								Control_Signals <= 1;
+								//ADD
 			
-                end
-                T2: begin
-			//MDR out and IR enable HI
-			#15 busSelect[21] <= 1; enable[23] <= 1;
-			#15 busSelect <= 0;
-                   
-                end
-                T3: begin
-			//R4 out and Y enable HI
-			#15 busSelect[4] <= 1; enable[27]<= 1;
-			#15 busSelect[4] <= 0; enable[27] <= 0;
-                end
-                T4: begin
-			//R5 out, Z enable HI
-			#15 busSelect[3] <= 1; enable[24] <= 1;
-			Control_Signals <= 4'd1; // ADD control signal 
-			#15 busSelect[3] <= 0;
-		
-                end
-                T5: begin
-			//Zlow out HI
-			enable[24] <= 0;
-			busSelect[19] <= 1;
-			//R1 enable HI
-			#15 enable[1] <= 1;
-			//Zlo out low 
-			#15 busSelect[19] <= 0; enable[24] <= 0;
-			
-                end
-            
-            endcase
-        end
+								enable[24] <= 1; 
+								enable[19] <= 1;
+								#15 enable[24] <= 0; 
+								enable[19] <= 0; busSelect[3] <=0; Control_Signals <= 0;//enable[18] <= 0; 
+		end
+		T5: begin
+								#10 busSelect[19] <= 1; enable[1] <= 1;
+								#15  busSelect[19] <= 0; enable[1] <= 0;
+		end
+	endcase
+end
 endmodule
