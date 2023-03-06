@@ -98,17 +98,24 @@ Clock = 0;
 			#15 busSelect <= 0; enable <= 0;
                 end
                 T0: begin
-                    #10 PC_out <= 1; MAR_enable <= 1; Z_enable <= 1; IncPC <= 1; 
-					#10 PC_out <= 0; MAR_enable <= 0; Z_enable <= 0;
+			//PC out, MAR enable, Z enable and Increment PC HI
+			#15 busSelect <= 20; enable <= 25; enable <= 24; //INC PC
+			#15 busSelect <= 0; enable <= 0;
+                   
                 end
                 T1: begin
-					Mdatain <= 32'h40090000; // opcode for shra R0, R1, R2
-					#10 ZLow_out <= 1; PC_enable <= 1; Read <= 1; MDR_enable <= 1;
-					#10 ZLow_out <= 0; PC_enable <= 0; Read <= 0; MDR_enable <= 0; IncPC <= 0; 
+			Mdatain <= 32'h40090000; // opcode for shra R0, R1, R2
+			//Z Low out, PC enable, MR Read and MDR enable HI
+			
+			#15 busSelect <= 18; enable <= 20; MR_Read <= 1; enable <= 21;
+			#15 busSelect <= 0; enable <= 0; MR_Read <= 0; //INC PC 0
+					
                 end
                 T2: begin
-                    #10 MDR_out <= 1; IR_enable= 1; 
-					#10 MDR_out <= 0; IR_enable= 0;
+			//MDR OUT and IR enable HI
+			#15 busSelect <= 21; enable <= 23;
+			#15 busSelect <= 0; enable <= 0;
+                   
                 end
                 T3: begin
 					#10 R2_out <= 1; Y_enable= 1; 
