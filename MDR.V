@@ -1,9 +1,5 @@
-module MDR(input [31:0] inputD, input clr, input clk, input enable, output [31:0] outputQ);
-   reg[31:0] tmp;
-	always @(posedge clk) begin
-      if (clr == 1) tmp <= 0;
-       else if (enable == 1)  tmp <= inputD;
-      
-   end
-	assign outputQ = tmp;
+module MDR(input [31:0] Mdatain, BusMuxOut, input clr, clk, enable, output [31:0] Q);
+   wire[31:0] MDMux_out;
+    MDMux mux(MDMux_out, BusMuxOut, Mdatain, read_signal);
+    Register mdr_reg(MDRdataout, MDMux_out, clk, clr, enable);
 endmodule
