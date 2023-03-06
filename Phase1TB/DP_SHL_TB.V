@@ -98,35 +98,41 @@ Reg_load1a: begin
                // initialize R0 with the value 3
                 end 
                 T0: begin
-                    #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  //DOUBLE CHECK PC reg
-					#10 PC_out <= 0; MAR_enable <= 0;
+			//PC out, MAR enable, increment PC and PC enable HI
+			#15 busSelect <= 20; enable <= 25; enable <= 20; //INC PC ++
+			#15 busSelect <= 0; enable <= 0;
+			
                 end
                 T1: begin
-                    PC_out <= 0;
-                    MDR_enable <= 1;
-                    Read <= 1;
-                    Mdatain <= 32'h489A8000; // opcode for shl R1, R3, R5
+			busSelect <= 0; enable <= 21; MR_Read <= 1;
+			Mdatain <= 32'h489A8000; // opcode for shl R1, R3, R5
+                    
+                    
                 end
                 T2: begin
-                    #10 MDR_out <= 1; IR_enable= 1; 
-                    #10 MDR_out <= 0;
+			//MDR out and IR HI
+			#15 busSelect <= 21; enable<= 23;
+			
+			#15 busSelect <= 0;
                 end
                 T3: begin
-					#10 R3_out <= 1; Y_enable <= 1;
-                    #10 R3_out <= 0; Y_enable <= 0;
+			//R3 out HI and Y enable 
+			#15 busSelect <= 3; enable <= 27;
+			#15 busSelect <= 0; enable <= 0;
+			
+			
                 end
                 T4: begin
-                    #10 R5_out <= 1; 
-                    opcode <= 5'b01001; // shl R3 by Y(R5) then store in Z
-                    Z_enable <= 1; 
-                    #10 R5_out <= 0;
+			#15 busSelect <= 5; enable <= 24;opcode <= 5'b01001; // shl R3 by Y(R5) then store in Z
+			#15 busSelect <= 0;
+			
                 end
                 T5: begin
-				    Z_enable <= 0;
-                    ZLow_out <= 1; 
-                    #10 R1_enable <= 1;
-					#10 ZLow_out <= 0; 
-                    R1_enable <= 0;
+			//enable low and Zlow out HI
+			#15 enable <=0; busSelect <= 19;
+			#15 enable <= 1;
+			#15 busSelect <= 0;
+			#15 enable <= 0;
                 end
             endcase
         end
