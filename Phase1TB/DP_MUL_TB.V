@@ -55,3 +55,72 @@ Clock = 0;
                   busMuxOut <= 32'h00000000;
                   
                 end
+              Reg_load1a: begin 
+                    Mdatain <= 32'h00000002; //In binary 0010
+                MR_Read <= 0; enable <= 0;
+                //MR Read and MDR enable HI
+                #15 MR_Read <= 1; enable <= 21;
+                #15 MR_Read <= 0; enable <= 0;
+                end
+                Reg_load1b: begin 
+                  //MDR Out and r6 enable hi
+                  #15 busSelect <= 21; enable <= 6;
+                   #15 busSelect <= 0; enable <= 0;
+                  //initialize R6 with the value 12
+                end
+                Reg_load2a: begin
+                    Mdatain <= 32'h00000002; // 0010
+                  //MR read and MDR enable hi
+                  #15 MR_Read <= 1; enable <= 21;
+                  #15 MR_Read <= 0; enable <= 0;
+                  
+                end
+                Reg_load2b: begin 
+                  //MDR out and R7 enable select HI
+                  #15 busSelect <= 21; enable <= 7;
+                  #15 busSelect <= 0; enable <= 0;
+                  //initialize R7 with the value 14
+                end
+                T0: begin
+                  //PC Out, MAR enable, PC enable and increment pc HI
+                  #15 busSelect <= 20; enable <= 25 ; enable <= 20; // INC PC ++
+                  #15 busSelect <= 0; enable <= 0;
+                    
+					#10 PC_out <= 0; MAR_enable <= 0;
+                end
+                T1: begin
+                    PC_out <= 0;
+                    MDR_enable <= 1;
+                    Read <= 1;
+                    Mdatain <= 32'h7B380000; //opcode for: mul R6, R7
+                end
+                T2: begin
+                    #10 MDR_out <= 1; IR_enable= 1; 
+                    #10 MDR_out <= 0;
+                end
+                T3: begin
+					#10 R6_out <= 1; Y_enable <= 1;
+                    #10 R6_out <= 0; Y_enable <= 0;
+                end
+                T4: begin
+                    #10 R7_out <= 1; 
+                    opcode <= 5'b01111; // MUL opcode
+                    Z_enable <= 1; 
+                    #10 R7_out <= 0;
+                end
+                T5: begin
+				    Z_enable <= 0;
+                    ZLow_out <= 1; 
+                    #10 LO_enable <= 1;
+					#10 ZLow_out <= 0; 
+                    LO_enable <= 0;
+                end
+                T6: begin
+                    ZHigh_out <= 1;
+                    #10 HI_enable <= 1;
+                    #10 ZHigh_out <= 0;
+                    HI_enable <= 0;
+                end
+            endcase
+        end
+endmodule
