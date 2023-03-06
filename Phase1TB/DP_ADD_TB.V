@@ -124,7 +124,7 @@ Clock = 0;
                 T4: begin
 			//R5 out, Z enable HI
 			#15 busSelect <= 3; enable <= 24;
-			Control_Signals <= 4'd4; // OR control signal 
+			Control_Signals <= 4'd1; // ADD control signal 
 			#15 busSelect <= 0;
 		
                 end
