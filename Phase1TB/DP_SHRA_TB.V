@@ -118,17 +118,20 @@ Clock = 0;
                    
                 end
                 T3: begin
-					#10 R2_out <= 1; Y_enable= 1; 
-					// #10 Y_enable = 0; R2_out <= 0; //Y_enable= 0; 
+			//R2 Out and Y enable HI
+			#15 busSelect <=2; enable <= 27;
+		
                 end
                 T4: begin
-					#10 Y_enable = 0; R2_out <= 0; //Y_enable= 0;  //This is temp fix
+			//Y enable and R2 Low
+			#15 enable <= 0; busSelect <= 0;
+			
+			#15 busSelect <= 3; enable <= 24;//FIX
+			opcode <= 5'b01000; //SHRA
 
-                    #10 R3_out <= 1;  Z_enable <= 1; opcode <= 5'b01000; //SHRA R3 and Y(R2) then store in Z_enable (10110)
                 end
                 T5: begin
-					//  #10 R3_out <= 0;  Z_enable <= 0;  ZLow_out <= 1; R1_enable <= 1;
-					// #10 ZLow_out <= 0; R1_enable <= 0;
+
                 end
             endcase
         end
