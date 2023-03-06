@@ -118,7 +118,8 @@ always @(Present_state) begin
                 end
                 T1: begin
                   //Clears PC out, sets MDR enable and MR read HI
-                  #15 busSelect <= 0; enable <= 21; MR_Read <= 1; Mdatain <= 32'h389A8000; // opcode for shr R1, R3, R5
+                  #15 busSelect <= 0; enable <= 21; MR_Read <= 1; 
+			Mdatain <= 32'h389A8000; // opcode for shr R1, R3, R5
                   
                 end
                 T2: begin
@@ -137,7 +138,9 @@ always @(Present_state) begin
                 end
                 T4: begin
 			//Set R5 out, Z enable HI
-			#15 busSelect <= 5; enable <= 24;opcode <= 5'b00111; // shr R3 by Y(R5) then store in Z
+			#15 busSelect <= 5; enable <= 24;
+			Control_Signals <= 4'd9;
+			// ROR signal 
 			#15 busSelect <= 0;
                    
                 end
