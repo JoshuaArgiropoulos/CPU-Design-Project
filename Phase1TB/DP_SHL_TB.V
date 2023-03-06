@@ -60,82 +60,84 @@ Reg_load1a: begin
 	Mdatain <= 32'h00000001; // 0001
 	MR_ Read <= 0; enable <= 0;
 	//MR read and MDR enable HI
-	#15 MR_Read <= 1; enable <= 21;
+	#15 MR_Read <= 1; enable[21] <= 1;
 	
-	#15 MR_Read <= 0; enable <= 0;
+	#15 MR_Read <= 0; enable[21] <= 0;
 	
                 end
                 Reg_load1b: begin 
 			//MDR out and R3 enable HI
-			#15 busSelect <= 21; enable <= 3;
-			#15 busSelect <= 0; enable <= 0;
+			#15 busSelect[21] <= 1; enable[3] <= 1;
+			#15 busSelect[21] <= 0; enable[3] <= 0;
                    
                 end
                 Reg_load2a: begin
                    
 			 Mdatain <= 32'h00000002; // 0010
 			//MR read and MDR enable HI
-			#15 MR_Read <= 1; enable <= 21;
-			#15 MR_Read <= 0; enable <= 0;
+			#15 MR_Read <= 1; enable[21] <= 1;
+			#15 MR_Read <= 0; enable [21] <= 0;
                 end
                 Reg_load2b: begin 
 			//MDR OUT and R5 enable HI
-			#15 busSelect <= 21; enable <= 5;
-			#15 busSelect <= 0; enable <= 0;
+			#15 busSelect [21] <= 1; enable[5] <= 1;
+			#15 busSelect[21] <= 0; enable[5] <= 0;
              // initialize R5 with the value 2
                 end
                 Reg_load3a: begin
                     
 			Mdatain <= 32'h00000003; // 0011
 			//MR Read and MDR enable HI
-			#15 MR_Read <= 1; enable <= 21;
-			#15 MR_Read <= 0; enable <= 0;
+			#15 MR_Read <= 1; enable[21] <= 1;
+			#15 MR_Read <= 0; enable[21] <= 0;
                 end
                 Reg_load3b: begin 
 			//MDR OUT and R1 enable HI
-			#15 busSelect <= 21; enable <= 1;
-			#15 busSelect <= 0; enable <= 0;
+			#15 busSelect[21] <= 1; enable[1] <= 1;
+			#15 busSelect[21] <= 0; enable[1] <= 0;
                // initialize R0 with the value 3
                 end 
                 T0: begin
 			//PC out, MAR enable, increment PC and PC enable HI
-			#15 busSelect <= 20; enable <= 25; enable <= 20; //INC PC ++
-			#15 busSelect <= 0; enable <= 0;
+			#15 busSelect[20] <= 1; enable[25] <= 1; enable[20] <= 1; //INC PC ++
+			#15 busSelect[20] <= 0; enable[25] <= 0; enable[20] <= 0;
 			
                 end
                 T1: begin
-			busSelect <= 0; enable <= 21; MR_Read <= 1;
+			busSelect[20] <= 0; enable[21] <= 1; MR_Read <= 1;
 			Mdatain <= 32'h489A8000; // opcode for shl R1, R3, R5
                     
                     
                 end
                 T2: begin
 			//MDR out and IR HI
-			#15 busSelect <= 21; enable<= 23;
+			#15 busSelect[21] <= 1; enable[23] <= 1;
 			
 			#15 busSelect <= 0;
                 end
                 T3: begin
 			//R3 out HI and Y enable 
-			#15 busSelect <= 3; enable <= 27;
-			#15 busSelect <= 0; enable <= 0;
+			#15 busSelect[3] <= 1; enable[27] <= 1;
+			#15 busSelect[3] <= 0; enable[27] <= 0;
 			
 			
                 end
                 T4: begin
-			#15 busSelect <= 5; enable <= 24;
+			#15 busSelect[5] <= 1; enable[24] <= 1;
 			Control_Signals <= 4'd8;
 			// SHL signal 
 			
-			#15 busSelect <= 0;
+			#15 busSelect[5] <= 0;
 			
                 end
                 T5: begin
 			//enable low and Zlow out HI
-			#15 enable <=0; busSelect <= 19;
-			#15 enable <= 1;
-			#15 busSelect <= 0;
-			#15 enable <= 0;
+			#15 enable[24] <=0; busSelect[19] <= 1;
+			#15 enable[24] <= 1;
+			#15 busSelect[19] <= 0;
+			#15 enable[24] <= 0;
+			
+			//Check these lines
                 end
             endcase
         end
