@@ -56,11 +56,12 @@ Clock = 0;
                   
                 end
               Reg_load1a: begin 
-                    Mdatain <= 32'h00000002; //In binary 0010
-                MR_Read <= 0; enable <= 0;
-                //MR Read and MDR enable HI
-                #15 MR_Read <= 1; enable <= 21;
-                #15 MR_Read <= 0; enable <= 0;
+		      Mdatain <= 32'h00000002; //In binary 0010
+		      MR_Read <= 0; enable <= 0;
+		      //MR Read and MDR enable HI
+		      #15 MR_Read <= 1; enable <= 21;
+		      #15 MR_Read <= 0; enable <= 0;         
+               
                 end
                 Reg_load1b: begin 
                   //MDR Out and r6 enable hi
@@ -69,7 +70,7 @@ Clock = 0;
                   //initialize R6 with the value 12
                 end
                 Reg_load2a: begin
-                    Mdatain <= 32'h00000002; // 0010
+                    Mdatain <= 32'h00000002; // Place 0010 into MdataIn
                   //MR read and MDR enable hi
                   #15 MR_Read <= 1; enable <= 21;
                   #15 MR_Read <= 0; enable <= 0;
@@ -108,7 +109,7 @@ Clock = 0;
                 T4: begin
 			//R7 out, Z enable HI
 			#15 busSelect <= 7; enable <= 24;
-			opcode <= 5'b01111; // MUL opcode
+			Control_Signals <= 4'd12; // Mul control signal 
 			#15 busSelect <= 0;
 		
                 end
