@@ -56,7 +56,7 @@ Clock = 0;
                   
                 end
               Reg_load1a: begin 
-		      Mdatain <= 32'h00000002; //In binary 0010
+		      Mdatain <= 32'h0000002; //In binary 0010
 		      MR_Read <= 0; enable <= 0;
 		      //MR Read and MDR enable HI
 		      #15 MR_Read <= 1; enable <= 21;
@@ -64,24 +64,37 @@ Clock = 0;
                
                 end
                 Reg_load1b: begin 
-                  //MDR Out and r6 enable hi
-                  #15 busSelect <= 21; enable <= 6;
+                  //MDR Out and r2 enable hi
+                  #15 busSelect <= 21; enable <= 2;
                    #15 busSelect <= 0; enable <= 0;
-                  //initialize R6 with the value 12
+                  //initialize R2 with the value 2
                 end
                 Reg_load2a: begin
-                    Mdatain <= 32'h00000002; // Place 0010 into MdataIn
+                    Mdatain <= 32'h00000012; // Place 0010 into MdataIn
                   //MR read and MDR enable hi
                   #15 MR_Read <= 1; enable <= 21;
                   #15 MR_Read <= 0; enable <= 0;
                   
                 end
                 Reg_load2b: begin 
-                  //MDR out and R7 enable select HI
-                  #15 busSelect <= 21; enable <= 7;
+                  //MDR out and R3 enable select HI
+                  #15 busSelect <= 21; enable <= 3;
                   #15 busSelect <= 0; enable <= 0;
-                  //initialize R7 with the value 14
+                  //initialize R3 with the value 12
                 end
+		Reg_load3a: begin
+			Mdatain <= 32'h00000018; //11000
+			//MR_Read and MDR enable HI
+			#15 MR_Read <= 1; enable <= 21;
+			#15 MR_Read <= 0; enable <= 0;
+                 
+                end
+                Reg_load3b: begin 
+			//MDR Out and R1 enable HI
+			#15 busSelect <= 21; enable <= 1;
+			#15 busSelect <= 0; enable <= 0;
+			// initialize R1 with the value 18
+			
                 T0: begin
                   //PC Out, MAR enable, PC enable and increment pc HI
                   #15 busSelect <= 20; enable <= 25 ; enable <= 20; // INC PC ++
@@ -102,14 +115,14 @@ Clock = 0;
                    
                 end
                 T3: begin
-			//R6 out and Y enable HI
-			#15 busSelect <= 6; enable <= 27;
+			//R2 out and Y enable HI
+			#15 busSelect <= 2; enable <= 27;
 			#15 busSelect <= 0; enable <= 0;
                 end
                 T4: begin
-			//R7 out, Z enable HI
-			#15 busSelect <= 7; enable <= 24;
-			Control_Signals <= 4'd12; // Mul control signal 
+			//R3 out, Z enable HI
+			#15 busSelect <= 3; enable <= 24;
+			Control_Signals <= 4'd4; // OR control signal 
 			#15 busSelect <= 0;
 		
                 end
@@ -117,19 +130,13 @@ Clock = 0;
 			//Zlow out HI
 			enable <= 0;
 			busSelect <= 19;
-			//LO enable HI
-			#15 enable <= 17;
+			//R1 enable HI
+			#15 enable <= 1;
 			//Zlo out low 
 			#15 busSelect <= 0; enable <= 0;
 			
                 end
-                T6: begin
-			//Z high out HI
-			busSelect <= 18;
-			//HI enable 
-			#15 enable <= 16;
-			#15 busSelect <= 0; enable <= 0;
-                end
+            
             endcase
         end
 endmodule
