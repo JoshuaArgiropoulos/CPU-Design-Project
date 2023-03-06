@@ -1,10 +1,10 @@
-module MDMux(input [31:0] BusMuxOut, input [31:0] Mdatain, input read, output [31:0] MDMuxOutput);
-  reg[31:0] temp;
-  always @(*) begin
-      case (read)
-         1'b0 : temp = BusMuxOut;
-         1'b1 : temp = Mdatain;
-      endcase
-   end
-	assign MDMuxOutput = temp;
+module MDMux(output reg [31:0] out, input wire [31:0] input1, input2, input wire signal);
+
+always@(*)begin
+		if (signal == 1)
+			out[31:0] <= input2[31:0];
+		else 
+			out[31:0] <= input1[31:0];
+	end
+ 
 endmodule
