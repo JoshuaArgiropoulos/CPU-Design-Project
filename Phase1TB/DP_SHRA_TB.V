@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module DP_AND_TB;
+module DP_SHRA_TB;
 
 reg [31:0] enable, busSelect, inPort, MDataIn;
 reg clk, clr, MR_Read;
@@ -44,44 +44,58 @@ Clock = 0;
             case (Present_state) // assert the required signals in each clock cycle
                 Default: begin
                     
-                  enable <= 32'hh00000000;
-                  budSelect <= 32'hh00000000;
-                  inPort <= 32'hh00000000;
-                  MDataIn<= 32'hh00000000;
+                  enable <= 32'h00000000;
+                  budSelect <= 32'h00000000;
+                  inPort <= 32'h00000000;
+                  MDataIn<= 32'h00000000;
                   clr <= 0; 
                   MR_Read <= 0;
                   Control_Signal <= 4'b0000;
                   
-                  busMuxOut <= 32'hh00000000;
+                  busMuxOut <= 32'h00000000;
                   
                 end
                 Reg_load1a: begin
-                    Mdatain <= 32'h00000012;
-                    Read = 0; MDR_enable = 0;
-                    #10 Read <= 1; MDR_enable <= 1;
-                    #10 Read <= 0; MDR_enable <= 0;
+			Mdatain <= 32'h00000012;
+			MR_Read <= 0;
+			enable <= 0;
+			//Set MR read to HI and MDR enable to HI
+			#15 MR_Read 1; enable <= 21;
+			#15 MR_Read <= 0; enable <= 0;
+			
+          
                 end
                 Reg_load1b: begin 
-                    #10 MDR_out <= 1; R2_enable <= 1;
-                    #10 MDR_out <= 0; R2_enable <= 0; // initialize R2 with the value 12
+			//MDR out and R2 enable hi
+			#15 busSelect <= 21; enable <= 2;
+			#15 busSelect <= 0; enable <= 0;
+                    
                 end
                 Reg_load2a: begin
-                    Mdatain <= 32'h00000014;
-                    #10 Read <= 1; MDR_enable <= 1;
-                    #10 Read <= 0; MDR_enable <= 0;
+                   
+			 Mdatain <= 32'h00000014;
+			//MR Read and MDR enable HI
+			#15 MR_Read <= 1; enable <= 21;
+			#15 MR_Read <= 0; enable <= 0;
+                    
                 end
                 Reg_load2b: begin 
-                    #10 MDR_out <= 1; R3_enable <= 1;
-                    #10 MDR_out <= 0; R3_enable <= 0; // initialize R3 with the value 14
+			//MDR OUT and R3 enable HI
+			#15 busSelect <= 21; enable <= 3;
+			#15 busSelect <= 0; enable <= 0;
+                   
                 end
                 Reg_load3a: begin
-                    Mdatain <= 32'h00000018;
-                    #10 Read <= 1; MDR_enable <= 1;
-                    #10 Read <= 0; MDR_enable <= 0;
+			 Mdatain <= 32'h00000018;
+			//MR Read and MDR enable HI
+			#15 MR_Read <= 1; enable <= 21;
+			#15 MR_Read<= 0; enable <= 0;
+		
                 end
                 Reg_load3b: begin 
-                    #10 MDR_out <= 1; R1_enable <= 1;
-                    #10 MDR_out <= 0; R1_enable <= 0; // initialize R1 with the value 18
+			//MDR out and R1 enable HI
+			#15 busSelect <= 21; enable <= 1;
+			#15 busSelect <= 0; enable <= 0;
                 end
                 T0: begin
                     #10 PC_out <= 1; MAR_enable <= 1; Z_enable <= 1; IncPC <= 1; 
