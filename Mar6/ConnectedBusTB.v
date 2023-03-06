@@ -1,17 +1,6 @@
 `timescale 1ns/10ps
 module ConnectedBusTB;
 
-//reg clk;
-/*
-
-reg enable = 1;
-reg clr = 0;
-reg  [31:0] D;
-wire [31:0] Q;
-
-always #10 clk = !clk;
-
-Register reg_instance(clk, clr, enable, D, Q);*/
 
 reg [31:0]				EncodeIn,
 							BusMuxInR0,
