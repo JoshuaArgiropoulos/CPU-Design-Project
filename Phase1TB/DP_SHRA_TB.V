@@ -60,73 +60,73 @@ Clock = 0;
 			MR_Read <= 0;
 			enable <= 0;
 			//Set MR read to HI and MDR enable to HI
-			#15 MR_Read 1; enable <= 21;
-			#15 MR_Read <= 0; enable <= 0;
+			#15 MR_Read 1; enable[21] <= 1;
+			#15 MR_Read <= 0; enable[21] <= 0;
 			
           
                 end
                 Reg_load1b: begin 
 			//MDR out and R2 enable hi
-			#15 busSelect <= 21; enable <= 2;
-			#15 busSelect <= 0; enable <= 0;
+			#15 busSelect[21] <= 1; enable[2] <= 1;
+			#15 busSelect[21] <= 0; enable[2] <= 0;
                     
                 end
                 Reg_load2a: begin
                    
 			 Mdatain <= 32'h00000014;
 			//MR Read and MDR enable HI
-			#15 MR_Read <= 1; enable <= 21;
-			#15 MR_Read <= 0; enable <= 0;
+			#15 MR_Read <= 1; enable[21] <= 1;
+			#15 MR_Read <= 0; enable[21] <= 0;
                     
                 end
                 Reg_load2b: begin 
 			//MDR OUT and R3 enable HI
-			#15 busSelect <= 21; enable <= 3;
-			#15 busSelect <= 0; enable <= 0;
+			#15 busSelect[21] <= 1; enable[3] <= 1;
+			#15 busSelect[21] <= 0; enable[3] <= 0;
                    
                 end
                 Reg_load3a: begin
 			 Mdatain <= 32'h00000018;
 			//MR Read and MDR enable HI
-			#15 MR_Read <= 1; enable <= 21;
-			#15 MR_Read<= 0; enable <= 0;
+			#15 MR_Read <= 1; enable[21] <= 1;
+			#15 MR_Read<= 0; enable[21] <= 0;
 		
                 end
                 Reg_load3b: begin 
 			//MDR out and R1 enable HI
-			#15 busSelect <= 21; enable <= 1;
-			#15 busSelect <= 0; enable <= 0;
+			#15 busSelect[21] <= 1; enable[1] <= 1;
+			#15 busSelect[21] <= 0; enable[1] <= 0;
                 end
                 T0: begin
 			//PC out, MAR enable, Z enable and Increment PC HI
-			#15 busSelect <= 20; enable <= 25; enable <= 24; //INC PC
-			#15 busSelect <= 0; enable <= 0;
+			#15 busSelect[20]<= 1; enable[25] <= 1; enable[24] <= 1; //INC PC
+			#15 busSelect[20] <= 0; enable[25] <= 0; enable[24] <= 0
                    
                 end
                 T1: begin
 			Mdatain <= 32'h40090000; // opcode for shra R0, R1, R2
 			//Z Low out, PC enable, MR Read and MDR enable HI
 			
-			#15 busSelect <= 18; enable <= 20; MR_Read <= 1; enable <= 21;
-			#15 busSelect <= 0; enable <= 0; MR_Read <= 0; //INC PC 0
+			#15 busSelect[18] <= 1; enable[20] <= 1; MR_Read <= 1; enable[21] <= 1;
+			#15 busSelect[18] <= 0; enable[20] <= 0;enable[21] <= 0; MR_Read <= 0; //INC PC 0
 					
                 end
                 T2: begin
 			//MDR OUT and IR enable HI
-			#15 busSelect <= 21; enable <= 23;
-			#15 busSelect <= 0; enable <= 0;
+			#15 busSelect[21] <= 1; enable[23] <= 1;
+			#15 busSelect[21] <= 0; enable[23] <= 0;
                    
                 end
                 T3: begin
 			//R2 Out and Y enable HI
-			#15 busSelect <=2; enable <= 27;
+			#15 busSelect[2]<=1; enable[27] <= 1;
 		
                 end
                 T4: begin
 			//Y enable and R2 Low
-			#15 enable <= 0; busSelect <= 0;
+			#15 enable[27] <= 0; busSelect [2]<= 0;
 			
-			#15 busSelect <= 3; enable <= 24;//FIX
+			#15 busSelect[3] <= 1; enable[24] <= 1;//FIX
 			Control_Signals <= 4'd13;
 			// SHRA signal 
 			
