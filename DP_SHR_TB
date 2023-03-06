@@ -1,0 +1,35 @@
+`timescale 1ns/10ps
+module DP_SHR_TB;
+
+reg [31:0] enable, busSelect, inPort, MDataIn;
+reg clk, clr, MR_Read;
+reg [3:0] Control_Signald;
+wire [31:0] busMuxOut;
+
+parameter Default = 4'b0000, Reg_loadla = 4'b0001, Reg_loadlb = 4'b0010, Reg_load2a = 4'b0011, 
+             Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, TO = 4'b0111, 
+             Tl = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100; 
+reg [3:0] Present_state = Default;
+
+     
+
+Datapath DUT(enable, busSelect, inPort, MDataIn, clk, clr, MD_Read, Control_Signals, busMuxOut); 
+
+initial begin
+
+clk = 0;
+forever #10 clk = ~clk;
+
+end
+
+always @(posedge clk) begin
+
+
+
+end
+
+always @(Present_state)
+
+
+end
+endmodule
