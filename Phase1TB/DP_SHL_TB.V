@@ -123,7 +123,10 @@ Reg_load1a: begin
 			
                 end
                 T4: begin
-			#15 busSelect <= 5; enable <= 24;opcode <= 5'b01001; // shl R3 by Y(R5) then store in Z
+			#15 busSelect <= 5; enable <= 24;
+			Control_Signals <= 4'd8;
+			// SHL signal 
+			
 			#15 busSelect <= 0;
 			
                 end
