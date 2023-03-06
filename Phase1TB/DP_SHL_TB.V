@@ -56,32 +56,46 @@ Clock = 0;
                   
                 end
 Reg_load1a: begin 
-                    Mdatain <= 32'h00000001; // 0001
-                    Read = 0; MDR_enable = 0;
-                    #10 Read <= 1; MDR_enable <= 1;
-                    #10 Read <= 0; MDR_enable <= 0;
+                   
+	Mdatain <= 32'h00000001; // 0001
+	MR_ Read <= 0; enable <= 0;
+	//MR read and MDR enable HI
+	#15 MR_Read <= 1; enable <= 21;
+	
+	#15 MR_Read <= 0; enable <= 0;
+	
                 end
                 Reg_load1b: begin 
-                    #10 MDR_out <= 1; R3_enable <= 1;
-                    #10 MDR_out <= 0; R3_enable <= 0; // initialize R3 with the value 1
+			//MDR out and R3 enable HI
+			#15 busSelect <= 21; enable <= 3;
+			#15 busSelect <= 0; enable <= 0;
+                   
                 end
                 Reg_load2a: begin
-                    Mdatain <= 32'h00000002; // 0010
-                    #10 Read <= 1; MDR_enable <= 1;
-                    #10 Read <= 0; MDR_enable <= 0;
+                   
+			 Mdatain <= 32'h00000002; // 0010
+			//MR read and MDR enable HI
+			#15 MR_Read <= 1; enable <= 21;
+			#15 MR_Read <= 0; enable <= 0;
                 end
                 Reg_load2b: begin 
-                    #10 MDR_out <= 1; R5_enable <= 1;
-                    #10 MDR_out <= 0; R5_enable <= 0; // initialize R5 with the value 2
+			//MDR OUT and R5 enable HI
+			#15 busSelect <= 21; enable <= 5;
+			#15 busSelect <= 0; enable <= 0;
+             // initialize R5 with the value 2
                 end
                 Reg_load3a: begin
-                    Mdatain <= 32'h00000003; // 0011
-                    #10 Read <= 1; MDR_enable <= 1;
-                    #10 Read <= 0; MDR_enable <= 0;
+                    
+			Mdatain <= 32'h00000003; // 0011
+			//MR Read and MDR enable HI
+			#15 MR_Read <= 1; enable <= 21;
+			#15 MR_Read <= 0; enable <= 0;
                 end
                 Reg_load3b: begin 
-                    #10 MDR_out <= 1; R1_enable <= 1;
-                    #10 MDR_out <= 0; R1_enable <= 0; // initialize R0 with the value 3
+			//MDR OUT and R1 enable HI
+			#15 busSelect <= 21; enable <= 1;
+			#15 busSelect <= 0; enable <= 0;
+               // initialize R0 with the value 3
                 end 
                 T0: begin
                     #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  //DOUBLE CHECK PC reg
