@@ -86,40 +86,48 @@ Clock = 0;
                   #15 busSelect <= 20; enable <= 25 ; enable <= 20; // INC PC ++
                   #15 busSelect <= 0; enable <= 0;
                     
-					#10 PC_out <= 0; MAR_enable <= 0;
+					
                 end
                 T1: begin
-                    PC_out <= 0;
-                    MDR_enable <= 1;
-                    Read <= 1;
+			//PC out to low, MDR enable and MR read to HI
+			busSelect <= 0; enable <= 21; MR_Read <= 1;
+	
                     Mdatain <= 32'h7B380000; //opcode for: mul R6, R7
                 end
                 T2: begin
-                    #10 MDR_out <= 1; IR_enable= 1; 
-                    #10 MDR_out <= 0;
+			//MDR out and IR enable HI
+			#15 busSelect <= 21; enable <= 23;
+			#15 busSelect <= 0;
+                   
                 end
                 T3: begin
-					#10 R6_out <= 1; Y_enable <= 1;
-                    #10 R6_out <= 0; Y_enable <= 0;
+			//R6 out and Y enable HI
+			#15 busSelect <= 6; enable <= 27;
+			#15 busSelect <= 0; enable <= 0;
                 end
                 T4: begin
-                    #10 R7_out <= 1; 
-                    opcode <= 5'b01111; // MUL opcode
-                    Z_enable <= 1; 
-                    #10 R7_out <= 0;
+			//R7 out, Z enable HI
+			#15 busSelect <= 7; enable <= 24;
+			opcode <= 5'b01111; // MUL opcode
+			#15 busSelect <= 0;
+		
                 end
                 T5: begin
-				    Z_enable <= 0;
-                    ZLow_out <= 1; 
-                    #10 LO_enable <= 1;
-					#10 ZLow_out <= 0; 
-                    LO_enable <= 0;
+			//Zlow out HI
+			enable <= 0;
+			busSelect <= 19;
+			//LO enable HI
+			#15 enable <= 17;
+			//Zlo out low 
+			#15 busSelect <= 0; enable <= 0;
+			
                 end
                 T6: begin
-                    ZHigh_out <= 1;
-                    #10 HI_enable <= 1;
-                    #10 ZHigh_out <= 0;
-                    HI_enable <= 0;
+			//Z high out HI
+			busSelect <= 18;
+			//HI enable 
+			#15 enable <= 16;
+			#15 busSelect <= 0; enable <= 0;
                 end
             endcase
         end
