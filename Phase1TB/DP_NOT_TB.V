@@ -118,7 +118,7 @@ Clock = 0;
 			#15 busSelect <= 0; enable <= 0;
                 end
                 T3: begin
-			opcode <= 5'b10010; //OR R3 and Y(R2) then store in Z_enable
+			Control_Signals <= 4'd6; //OR R3 and Y(R2) then store in Z_enable
 			//R1 out and Z enable HI
 			#15 busSelect <= 1; enable <= 24;
                     
