@@ -137,7 +137,10 @@ always @(Present_state) begin
                 end
                 T4: begin
 			//Set R5 out, Z enable HI
-			#15 busSelect <= 5; enable <= 24;opcode <= 5'b00111; // shr R3 by Y(R5) then store in Z
+			#15 busSelect <= 5; enable <= 24;
+			Control_Signals <= 4'd7;
+			// SHR signal 
+			
 			#15 busSelect <= 0;
                    
                 end
