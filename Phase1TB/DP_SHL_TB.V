@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module DP_SHRA_TB;
+module DP_SHL_TB;
 
 reg [31:0] enable, busSelect, inPort, MDataIn;
 reg clk, clr, MR_Read;
