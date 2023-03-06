@@ -1,0 +1,1 @@
+module ALU (output reg [63:0] out, input [31:0] input0, input1, input [3:0] OpSel);

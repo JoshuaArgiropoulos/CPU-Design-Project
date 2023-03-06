@@ -1,0 +1,26 @@
+`include "Register.v"
+
+`timescale 1ns/10ps
+module testbench;
+
+reg clk = 0;
+reg enable = 1;
+reg  [15:0] D;
+wire [15:0] Q;
+
+always #1 clock = !clock;
+
+initial $dumpfile("registertestbench.vcd");
+initial $dumpvars(0, RegisterTestbench);
+
+Register r(clk, enable, D, Q);
+
+initial begin
+    //These events must be in chronological order.
+    # 5 D = 31;
+    # 5 D = 127;
+    # 5 enable = 0;
+    # 5 D = 1023;
+    # 5 $finish;
+end
+endmodule
