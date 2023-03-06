@@ -98,12 +98,12 @@ always @(Present_state) begin
 																
 		end
 		T1: begin
-								busSelect[19] <= 1;
+								#10 busSelect[19] <= 1;
 								enable[20] <= 1;
 								MD_Read <= 1;
 								enable[21] <= 1;
 								MDataIn <= 32'h28918000;
-								#40 busSelect[19] <= 0;
+								#15 busSelect[19] <= 0;
 								busSelect[19] <= 0;
 								enable[20] <= 0;
 								MD_Read <= 0;
@@ -123,26 +123,28 @@ always @(Present_state) begin
 		end
 		T2: begin
 								//busSelect[21] <= 1;
-								//#15 busSelect[21] <= 1; enable[23] <= 1;
-								//#15 busSelect[21] <= 0; enable[23] <= 0;
+								#10 busSelect[21] <= 1; enable[23] <= 1;
+								#15 busSelect[21] <= 0; enable[23] <= 0;
 								
 								
 		end
 		T3: begin
-								busSelect[2] <= 1; enable[27] <= 1;
-								#20 busSelect[2] <= 0; enable[27] <= 0;
+								#10 busSelect[2] <= 1; enable[27] <= 1;
+								#15 busSelect[2] <= 0; enable[27] <= 0;
 		end
 		T4: begin
 								//#15 busSelect[2] <= 0; 
 								//#15 enable[27] <= 0;
-								busSelect[3] <=1;
-								#20 Control_Signals <= 3;
-								enable[24] <= 1; enable[18] <= 1; enable[19] <= 1;
-								#20 enable[24] <= 0; enable[18] <= 0; enable[19] <= 0; busSelect[3] <=0; 
+								#10 busSelect[3] <=1;
+								Control_Signals <= 3;
+								enable[24] <= 1; 
+								enable[19] <= 1;//enable[18] <= 1;
+								#15 enable[24] <= 0; 
+								enable[19] <= 0; busSelect[3] <=0; Control_Signals <= 0;//enable[18] <= 0; 
 		end
 		T5: begin
-								busSelect[19] <= 1; enable[1] <= 1;
-								#40 Control_Signals <= 0; busSelect[19] <= 0;
+								#10 busSelect[19] <= 1; enable[1] <= 1;
+								#15  busSelect[19] <= 0; enable[1] <= 0;
 		end
 	endcase
 end
