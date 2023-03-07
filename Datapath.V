@@ -3,7 +3,7 @@ module datapath (
     input clk, clr, MD_Read, IncPC,
     input [3:0] Control_Signals,
     output [31:0] TrueBusMuxOut, 
-	 output wire [31:0] r1, r2, r3, mdr, zhi, zlo, pc, hi, lo
+	 output wire [31:0] r1, r2, r3, mdr, zhi, zlo, pc, hi, lo, temp
 );
 
 	
@@ -26,8 +26,8 @@ module datapath (
 	 wire [31:0] BusMuxIn_R14;
 	 wire [31:0] BusMuxIn_R15;
 	 
-	 wire [31:0] yOut;
-	 //wire [63:0] ZOut;
+	 wire [31:0] YOut;
+	 wire [63:0] ZOut;
 	 
 	 wire [31:0] BusMuxIn_HI;
 	 wire [31:0] BusMuxIn_LO;
@@ -41,7 +41,7 @@ module datapath (
 	 wire [31:0] BusMuxIn_INPORT;
 	 wire [31:0] BusMuxIn_OUTPORT;
 	 wire [31:0] CSignExtended;
-	 wire [31:0] MDROut;
+	 //wire [31:0] MDROut;
 	 ///wire [31:0] internalALUOutZHI;
 	 //wire [31:0] internalALUOutZLO;
 	 //wire [31:0] internalBusMuxOut;
@@ -57,12 +57,14 @@ module datapath (
 	assign r2 = BusMuxIn_R2;
 	assign r3 = BusMuxIn_R3;
 	assign mdr = BusMuxIn_MDR;
-	assign zhi = BusMuxIn_ZHI;
+	assign zhi = BusMuxIn_ZRHI;
 	assign zlo = BusMuxIn_ZRLO;
 	assign pc = BusMuxIn_PC;
 	assign hi = BusMuxIn_HI;
 	assign lo = BusMuxIn_LO;
+	assign temp = BusMuxIn_ZLO;
 	assign TrueBusMuxOut = BusMuxOut;
+	
 
     Register R0(clk, clr, enable[0], BusMuxOut, BusMuxIn_R0);
     Register R1(clk, clr, enable[1], BusMuxOut, BusMuxIn_R1);
@@ -100,8 +102,8 @@ module datapath (
     
     //MDMux MDMux(BusMuxOut, Mdatain, MD_Read, MDMuxOutput);
 
-    MDR MdrReg(MDMuxOutput, clr, clk, enable[21], MDROut);
-    
+    MDR MdrReg(MDataIn, BusMuxOut, clr, clk, enable[21], MD_Read, BusMuxIn_MDR);
+    //input [31:0] Mdatain, BusMuxOut, input clr, clk, enable, output [31:0] Q
 	 Register INPORT(clk, clr, enable[22], InPortData, BusMuxIn_INPORT);
 	 
 	 
