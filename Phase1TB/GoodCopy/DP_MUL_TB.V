@@ -93,8 +93,8 @@ clk = 0;
                 T1: begin
 			//PC out to low, MDR enable and MR read to HI
 			busSelect[20] <= 0; enable[21] <= 1; MR_Read <= 1;
-	
-                    MDataIn <= 32'h7B380000; //opcode for: mul R6, R7
+               MDataIn <= 32'h7B380000; //opcode for: mul R6, R7
+					
                 end
                 T2: begin
 			//MDR out and IR enable HI
