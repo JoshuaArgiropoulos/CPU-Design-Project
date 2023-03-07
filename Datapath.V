@@ -41,17 +41,7 @@ module datapath (
 	 wire [31:0] BusMuxIn_INPORT;
 	 wire [31:0] BusMuxIn_OUTPORT;
 	 wire [31:0] CSignExtended;
-	 //wire [31:0] MDROut;
-	 ///wire [31:0] internalALUOutZHI;
-	 //wire [31:0] internalALUOutZLO;
-	 //wire [31:0] internalBusMuxOut;
      wire [31:0] BusMuxOut;
-	 
-	 // Modules
-	 
-	 
-	 
-    //LOOK TO FIX
    
    assign r1 = BusMuxIn_R1;
 	assign r2 = BusMuxIn_R2;
@@ -92,22 +82,10 @@ module datapath (
 	 Register ZHI(clk, clr, enable[18], BusMuxIn_ZHI, BusMuxIn_ZRHI);
     Register ZLO(clk, clr, enable[19], BusMuxIn_ZLO, BusMuxIn_ZRLO);
 	 Register PC(clk, clr, enable[20], IncPC, BusMuxIn_PC);
-    //Register MAR(clk, clr, enable, BusMuxOut, BusMuxIn_MDR);
-	 
-	 
-   
-	 
-
-    //ConnectedBus BusInst(inPort, BusMuxIn_R0, R1_Out, R2_Out, R3_Out,R4_Out, R5_Out, R6_Out, R7_Out, R8_Out, R9_Out, R10_Out, R11_Out, R12_Out, R13_Out, R14_Out, R15_Out, Hi, Lo, PC, IR, inPort, SignExtended, BusMuxOut, EncodeOut);
-    
-    //MDMux MDMux(BusMuxOut, Mdatain, MD_Read, MDMuxOutput);
 
     MDR MdrReg(MDataIn, BusMuxOut, clr, clk, enable[21], MD_Read, BusMuxIn_MDR);
-    //input [31:0] Mdatain, BusMuxOut, input clr, clk, enable, output [31:0] Q
 	 Register INPORT(clk, clr, enable[22], InPortData, BusMuxIn_INPORT);
 	 
-	 
-	 //idk about these
 	 Register IR(clk, clr, enable[23], BusMuxOut, BusMuxIn_IR);
     
     Register64bit Z(clk, clr, enable[24], ZOut, BusMuxIn_ZHI, BusMuxIn_ZLO);
@@ -115,8 +93,7 @@ module datapath (
 	 Register MAR(clk, clr, enable[25], BusMuxOut);
 	 Register OUTPORT(clk, clr, enable[26], BusMuxOut, BusMuxIn_OUTPORT);
 	 Register Y(clk, clr, enable[27], BusMuxOut, YOut);
-	 
-	  // Instantiate ALU module
+	
     
     ALU ALUPath(YOut, BusMuxOut, Control_Signals[3:0], ZOut);
 	 
