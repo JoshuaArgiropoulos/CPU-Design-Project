@@ -80,7 +80,7 @@ clk = 0;
                   //MDR out and R7 enable select HI
 			#15 busSelect[21] <= 1; enable[7] <= 1;
 			#15 busSelect[21] <= 0; enable[7] <= 0;
-                  //initialize R7 with the value 14
+                  //initialize R7 with the value 2
                 end
                 T0: begin
                   	#10
