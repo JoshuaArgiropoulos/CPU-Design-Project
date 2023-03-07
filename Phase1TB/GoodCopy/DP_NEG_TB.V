@@ -4,7 +4,7 @@ module DP_NEG_TB;
 reg [31:0] enable, busSelect, inPort, MDataIn;
 reg clk, clr, MD_Read;
 reg [3:0] Control_Signals;
-wire [31:0] busMuxOut, r1, r2, r3, mdr, zhi, zlo, pc, hi, lo, temp;
+	wire [31:0] busMuxOut, r1, r2, r3, mdr, zhi, zlo, pc, hi, lo, temp, IncPC;
 //wire [63:0] temp;
 
 parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011, 
