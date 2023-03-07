@@ -137,14 +137,15 @@ always @(Present_state) begin
 								//#15 enable[27] <= 0;
 								#10 busSelect[3] <=1;
 								Control_Signals <= 3;
-								enable[24] <= 1; 
-								enable[19] <= 1;//enable[18] <= 1;
+								enable[24] <= 1; //enable[19] <= 1;
 								#15 enable[24] <= 0; 
-								enable[19] <= 0; busSelect[3] <=0; Control_Signals <= 0;//enable[18] <= 0; 
+								//enable[18] <= 1;
+								//#15 enable[24] <= 0; enable[19] <= 0; 
+								busSelect[3] <=0; Control_Signals <= 0;//enable[18] <= 0; 
 		end
 		T5: begin
-								#10 busSelect[19] <= 1; enable[1] <= 1;
-								#15  busSelect[19] <= 0; enable[1] <= 0;
+								#10 busSelect[24] <= 0; enable[1] <= 0;//enable[24] <= 0; busSelect[3] <=0; Control_Signals <= 0; busSelect[19] <= 1; enable[1] <= 1;//enable[18] <= 0;  
+								#15  busSelect[24] <= 0; enable[1] <= 0;
 		end
 	endcase
 end
