@@ -1,4 +1,4 @@
-module RAM_Reg_TB();
+module RAM_RegTB();
 
   // Inputs
   reg clk;
@@ -21,18 +21,23 @@ module RAM_Reg_TB();
   );
 
   // Clock generation
-  always #5 clk = ~clk;
+  always #10 clk = ~clk;
 
   initial begin
     clk <= 0;
     Data_Signal <= 32'h12345678;
-    Write <= 1;
-    Address_Signal <= 8'h00;
-    #10;
+    Write <= 0;
+	 Read <= 0;
+    Address_Signal <= 8'h1;
+    #100;
+	 Write <= 1;
+	 #100
     Write <= 0;
     Read <= 1;
-    #10;
+    #100;
    
     Read <= 0;
   end
+  
 endmodule
+
