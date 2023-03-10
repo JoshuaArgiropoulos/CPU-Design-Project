@@ -4,11 +4,11 @@ module RAM_Reg(
   input Read,
   input Write,
   input [31:0] Address_Signal,
-  output reg [31:0] BusMuxIn
+  output reg[31:0] BusMuxIn
 );
 
-  reg [31:0] RAM[512]; // 512 32-bit registers for memory storage
-
+  reg [31:0] RAM[511:0]; 
+  
   always @(posedge clk) begin 
     if (Write) begin
       RAM[Address_Signal] <= Data_Signal;
@@ -17,6 +17,5 @@ module RAM_Reg(
       BusMuxIn <= RAM[Address_Signal];
     end
   end
-	 
+	
 endmodule
-
