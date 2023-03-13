@@ -1,7 +1,6 @@
-module RevisedR0(input clk, clr, enable, BAout, input D[31:0], output BusMuxOut[31:0]);
+module RevisedR0(input clk, clr, enable, BAout, input [31:0] D, output [31:0] BusMuxOut);
 
 	reg [31:0] ra;
-	
 	
 	always @(posedge clk) begin
 		if(clr)
@@ -9,6 +8,6 @@ module RevisedR0(input clk, clr, enable, BAout, input D[31:0], output BusMuxOut[
 		else if(enable)
 			ra <= D;
 	end		
-	assign BusMuxOut = (ra & (-BAout));
+	assign BusMuxOut = (ra & (~BAout));
 	
 endmodule
