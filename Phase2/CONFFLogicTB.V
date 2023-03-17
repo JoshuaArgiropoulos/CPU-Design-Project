@@ -1,10 +1,14 @@
+`timescale 1ns/10ps
 module CONFFLogicTB();
 
   // Inputs
-  reg enable, reg [31:0] IRIn, reg [31:0] BusMuxIn, reg clk;
+  reg enable;
+  reg [31:0] IRIn;
+  reg [31:0] BusMuxIn;
+  reg clk;
 
   // Outputs 
-  wire [31:0] ControlUnitOut
+  wire [31:0] ControlUnitOut;
  
   CONFFLogic  CONFFLogic_test(
     .enable(enable),
@@ -19,10 +23,38 @@ module CONFFLogicTB();
   initial begin
     clk <= 0;
     enable <= 0;
-    IRIn <=32'b10100101000011110000000011111111;
-    BusMuxIn <= 32'b11111111111100001111000011110101;
-    #100
-    enable <=1;
+    
+	 //test case 1 Bit 0 is high and BusNor is high 
+	 #20
+	 IRIn <=32'b0000_0000_0000_0000_000__00__000_0000_0000;
+	 BusMuxIn <= 32'b0000_0000_0000_0000_0000_0000_0000_0000;
+	 enable <=1;
+	 #20
+	 enable <= 0;
+	 //Test case 2 Bit 1 is High and BusNor low
+	 #20
+	 IRIn <=32'b0000_0000_0000_0000_000__00__000_0000_0000;
+	 BusMuxIn <= 32'b0000_0000_0000_0000_0000_0000_0000_0000;
+	 enable <=1;
+	 #20
+	 enable <= 0;
+	 //Test case 3 32 bit is Low and Bit 2 is high
+	 #20
+	 IRIn <=32'b0000_0000_0000_0000_000__00__000_0000_0000;
+	 BusMuxIn <= 32'b0000_0000_0000_0000_0000_0000_0000_0000;
+	 enable <=1;
+	 #20
+	 enable <= 0;
+	 //Test case 4 32 bit is high and Bit 3 is high
+	 #20
+	 IRIn <=32'b0000_0000_0000_0000_000__00__000_0000_0000;
+	 BusMuxIn <= 32'b0000_0000_0000_0000_0000_0000_0000_0000;
+	 enable <=1;
+	 #20
+	 enable <= 0;
+	 //test case 5 dont branch 31 is high and bit 3 is low 
+	 
+	 
   end
   
 endmodule
