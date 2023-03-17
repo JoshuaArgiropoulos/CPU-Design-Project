@@ -1,10 +1,18 @@
 module CONFFLogic(input enable, input [31:0] IRIn, input [31:0] BusMuxIn, output [31:0] ControlUnitOut);
+
 	reg [3:0] Ra;
 	
-	reg [31:0] Bit0;
-	reg [31:0] Bit1;
-	reg [31:0] Bit2;
-	reg [31:0] Bit3;
+	reg Bit0;
+	reg Bit1;
+	reg Bit2;
+	reg Bit3;
+	
+	reg busOr;
+	reg busNor;
+	
+	reg D;
+	reg Q;
+	
 	always @(*)
 begin
     case([20:19] IRIn)
@@ -15,27 +23,28 @@ begin
         default: Ra = 4'b0000;
     endcase
 	 
-	 if (Ra[0]) begin
-	 //BRZR
-	 else if (Ra[1]) begin
-	 //BRNZ
-	 else if (Ra[2]) begin
-	 //BRPL
-	 else if (Ra[3]) begin
-	 //BRMI
+	 assign busOr = BusMuxIn[0] | BusMuxIn[1] | BusMuxIn[2] | BusMuxIn[3] | BusMuxIn[4] | BusMuxIn[5] | BusMuxIn[6] | BusMuxIn[7] | BusMuxIn[8] | BusMuxIn[9] | BusMuxIn[10] | BusMuxIn[11] | BusMuxIn[12] | BusMuxIn[13] | BusMuxIn[14] | BusMuxIn[15] | BusMuxIn[16] | BusMuxIn[17] | BusMuxIn[18] | BusMuxIn[19] | BusMuxIn[20] | BusMuxIn[21] | BusMuxIn[22] | BusMuxIn[23] | BusMuxIn[24] | BusMuxIn[25] | BusMuxIn[26] | BusMuxIn[27] | BusMuxIn[28] | BusMuxIn[29] | BusMuxIn[30] | BusMuxIn[31];
 	 
-	 Bit0 <= Ra[0] & ;
-	 Bit1 <= Ra[0] & ~;
-	 Bit2 <= Ra[0] & ~IRIn[31];
-	 Bit3 <= Ra[0] & IRIn[31];
+	 assign busNor = ~busOr;
+	 
+	 //Used to calc the logic with the decoder and the Bus
+	 Bit0 <= Ra[0] & busNor;	
+	 Bit1 <= Ra[1] & ~busNor;
+	 Bit2 <= Ra[2] & ~IRIn[31];
+	 Bit3 <= Ra[3] & IRIn[31];
+	 
+	 assign D = Bit0 | Bit1 | Bit2 | Bit3;
+	 
 	 
 	 
 	if (enable)
-		temp1 <= temp2;
+		Q <= D;
+	else 
+		Q = 1b'0;
 	
 	
 	
 	
-		assign ControlUnitOut = *****HOLDER******;
+		assign ControlUnitOut = Q;
 
 endmodule
