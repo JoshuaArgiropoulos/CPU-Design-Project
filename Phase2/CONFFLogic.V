@@ -1,4 +1,4 @@
-module CONFFLogic(input enable, input [31:0] IRIn, input [31:0] BusMuxIn, output [31:0] ControlUnitOut);
+module CONFFLogic(input enable, input [31:0] IRIn, input [31:0] BusMuxIn, output ControlUnitOut);
 
 	reg [3:0] Ra;
 	reg Bit0;
