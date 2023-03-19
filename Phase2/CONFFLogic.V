@@ -36,8 +36,8 @@ module CONFFLogic(input enable, input [31:0] IRIn, input [31:0] BusMuxIn, output
 		//Used to calc the logic with the decoder and the Bus
 		Bit0 = Ra[0] & busNor;	
 		Bit1 = Ra[1] & ~busNor;
-		Bit2 = Ra[2] & ~IRIn[31];
-		Bit3 = Ra[3] & IRIn[31];
+		Bit2 = Ra[2] & ~BusMuxIn[31];
+		Bit3 = Ra[3] & BusMuxIn[31];
 		//Ors the 4 AND gates to find what D is 
 		D = Bit0 | Bit1 | Bit2 | Bit3;
 		//IF CONIn is high, D = Q
