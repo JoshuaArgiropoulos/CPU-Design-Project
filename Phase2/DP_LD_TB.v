@@ -149,7 +149,7 @@ always @(Present_state) begin
 								//#15 busSelect[2] <= 0; 
 								//#15 enable[19] <= 0;
 								#10 busSelect[23] <=1; Control_Signals <= 1; enable[18] <= 1;
-								#15 busSelect[32] <=0; Control_Signals <= 0; enable[18] <= 0;
+								#15 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
 		end
 		T5: begin
 								//#10 enable[19] <= 1; 
@@ -161,13 +161,15 @@ always @(Present_state) begin
 
 								#10 MD_Read <= 1; ReadRAM <= 1; enable[21] <= 1;
 								
-								#15 MD_Read <= 0; ReadRAM <= 0; enable[21] <= 0;
+								#15  ReadRAM <= 0;
 		end
 		T7: begin
 
-								#10 busSelect[21] <= 1; Gra <= 1; Rin <= 1;
+								#10 MD_Read <= 0; enable[21] <= 0; 
+								    busSelect[21] <= 1; Gra <= 1; Rin <= 1;
 								
-								#15 busSelect[21]<= 0; Gra <= 0; Rin <= 0;
+								#15 Rin <= 0;
+								#15 busSelect[21]<= 0; Gra <= 0;
 		end
 	endcase
 end
