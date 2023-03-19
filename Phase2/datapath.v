@@ -2,8 +2,8 @@ module datapath (
 	 input [31:0] enable, busSelect, InPortData, /*MDataIn,*/
     input clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM,// IncPC,
     input [4:0] Control_Signals,
-    output [31:0] TrueBusMuxOut, 
-	 output wire [31:0] r1, r2, r3, mdr, zhi, zlo, pc, ir, hi, lo, temp
+    output [31:0] TrueBusMuxOut, OutputUnit, 
+	 output wire [31:0] r1, r2, r0, mdr, zhi, zlo, pc, ir, hi, lo, temp
 );
 	 //connect registers output to bus mux
 	 wire [31:0] BusMuxIn_R0;
@@ -38,7 +38,6 @@ module datapath (
 	 wire [31:0] BusMuxIn_INPORT;
 	 wire [31:0] BusMuxIn_OUTPORT;
 	 wire [31:0] CSignExtended;
-	wire [31:0] CONFFOut;
     wire [31:0] BusMuxOut;
 	 
 	 wire [31:0] RAMOut;
@@ -47,13 +46,13 @@ module datapath (
 	 wire [31:0] IROut;
 	 wire [15:0] regsIn;
 	 wire [15:0] regsOut;
-	 
+	 wire [31:0] CONFFOut;
 
 	 // Modules
    
    assign r1 = BusMuxIn_R1;
 	assign r2 = BusMuxIn_R2;
-	assign r3 = BusMuxIn_R3;
+	assign r0 = BusMuxIn_R0;
 	assign mdr = BusMuxIn_MDR;
 	assign zhi = BusMuxIn_ZHI;
 	assign zlo = BusMuxIn_ZLO;
@@ -108,11 +107,10 @@ module datapath (
 	 Register PC(clk, clr, enable[20], BusMuxOut, BusMuxIn_PC);
 	 
     MDR MdrReg(/*MDataIn*/ RAMOut, BusMuxOut, clr, clk, enable[21], MD_Read, BusMuxIn_MDR);
-	 Register INPORT(clk, clr, enable[22], InPortData, BusMuxIn_INPORT);
+	 //Register INPORT(clk, clr, enable[22], InPortData, BusMuxIn_INPORT);
 	 Register IR(clk, clr, enable[24], BusMuxOut, IROut);
 	 Register MAR(clk, clr, enable[25], BusMuxOut, AddressSignalRAM); //output change from BusMuxOut
 	 Register OUTPORT(clk, clr, enable[26], BusMuxOut, BusMuxIn_OUTPORT);
-	CONFFLogic CFF(enable[27], IROut, BusMuxOut, CONFFOut);
 	 //enable[27] is IncPC
 	 
 	  // Instantiate ALU module
@@ -121,6 +119,11 @@ module datapath (
 	 
 	 selectAndEncode sae(Gra, Grb, Grc, Rin, Rout, BAout, IROut, regsIn, regsOut, CSignExtended);
 	 RAM RAMdp(clk, ReadRAM, WriteRAM, AddressSignalRAM, BusMuxOut, RAMOut); //not sure about outputs here
+	 
+	 CONFFLogic CFF(enable[27], IROut, BusMuxOut, CONFFOut);
+	 
+	 Inport inprt(clr, clk, InPortData, BusMuxIn_INPORT);
+	 Outport otprt(clr, clk, enable, BusMuxOut, OutputUnit);
 	 
 	 ConnectedBus dpBus(busSelect, BusMuxIn_R0, BusMuxIn_R1, BusMuxIn_R2, BusMuxIn_R3,
 	 BusMuxIn_R4, BusMuxIn_R5, BusMuxIn_R6, BusMuxIn_R7, BusMuxIn_R8,
