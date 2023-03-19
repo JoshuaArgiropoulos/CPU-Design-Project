@@ -113,6 +113,7 @@ always @(Present_state) begin
 								#10 busSelect[20] <= 1;//PC
 								enable[25] <= 1;//MAR
 								//enable[27] <= 1;//incPC bit is bit 27
+								//INC PC
 								Control_Signals <= 14;
 								enable[18] <= 1;//Zin
 								
@@ -171,7 +172,7 @@ always @(Present_state) begin
 		end
 		T6: begin
 								//Zlow out, CON -> PC in
-
+								//Need to find a way to CON -> PCin and preload branch
 								#10 busSelect[19] <= 1;
 								
 								
