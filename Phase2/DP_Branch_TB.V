@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module DP_BRanchTB_TB;
+module DP_Branch_TB;
 
 reg [31:0] enable, busSelect, inPort, MDataIn;
 reg clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM;//, IncPC;
