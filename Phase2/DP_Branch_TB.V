@@ -1,3 +1,8 @@
+//brzr R6, 25 = 9B000019
+//brnz R6, 25 = 9B080019
+//brpl R6, 25 = 9B100019
+//brmi R6, 25 = 9B180019
+
 `timescale 1ns/10ps
 module DP_Branch_TB;
 
@@ -165,18 +170,13 @@ always @(Present_state) begin
 								#15 busSelect[23] <= 0; Control_Signals <= 0; enable[18] <= 0;
 		end
 		T6: begin
+								//Zlow out, CON -> PC in
 
-								#10 MD_Read <= 1; ReadRAM <= 1; enable[21] <= 1;
+								#10 busSelect[19] <= 1;
 								
-								#15  ReadRAM <= 0;
-		end
-		T7: begin
-
-								#10 MD_Read <= 0; enable[21] <= 0; 
-								    busSelect[21] <= 1; Gra <= 1; Rin <= 1;
 								
-								#15 Rin <= 0;
-								#15 busSelect[21]<= 0; Gra <= 0;
+								#15  busSelect[19] <= 0;
+	
 		end
 	endcase
 end
