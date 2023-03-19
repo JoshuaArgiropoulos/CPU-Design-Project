@@ -38,6 +38,7 @@ module datapath (
 	 wire [31:0] BusMuxIn_INPORT;
 	 wire [31:0] BusMuxIn_OUTPORT;
 	 wire [31:0] CSignExtended;
+	wire [31:0] CONFFOut;
     wire [31:0] BusMuxOut;
 	 
 	 wire [31:0] RAMOut;
@@ -111,6 +112,7 @@ module datapath (
 	 Register IR(clk, clr, enable[24], BusMuxOut, IROut);
 	 Register MAR(clk, clr, enable[25], BusMuxOut, AddressSignalRAM); //output change from BusMuxOut
 	 Register OUTPORT(clk, clr, enable[26], BusMuxOut, BusMuxIn_OUTPORT);
+	CONFFLogic CFF(enable[27], IROut, BusMuxOut, CONFFOut);
 	 //enable[27] is IncPC
 	 
 	  // Instantiate ALU module
