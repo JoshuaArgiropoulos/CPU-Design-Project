@@ -8,7 +8,7 @@ module CONFFLogicTB();
   reg clk;
 
   // Outputs 
-  wire [31:0] ControlUnitOut;
+  wire ControlUnitOut;
  
   CONFFLogic  CONFFLogic_test(
     .enable(enable),
