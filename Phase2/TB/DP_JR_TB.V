@@ -143,9 +143,9 @@ always @(Present_state) begin
 								
 								
 								
-								//Gra, Rout and Out.Port
-								#10 Gra <= 1; busSelect[0] <= 1; enable[27] <= 1;
-								#15 Gra <= 0; busSelect[0] <= 0; enable[27] <= 0;
+								//Gra, Rout and PC in 
+								#10 Gra <= 1; busSelect[0] <= 1; enable[20] <= 1;
+								#15 Gra <= 0; busSelect[0] <= 0; enable[20] <= 0;
 		end
 		
 	endcase
