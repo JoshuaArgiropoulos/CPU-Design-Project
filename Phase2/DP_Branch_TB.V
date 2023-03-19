@@ -9,7 +9,7 @@ wire [31:0] busMuxOut, r1, r2, r3, mdr, zhi, zlo, pc, ir;//, hi, lo, temp;
 
 parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011, 
 			 Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, T0 = 4'b0111, 
-			 T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100, T6 = 4'b1101, T7 = 4'b1110;
+			 T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100, T6 = 4'b1101;
 reg [3:0] Present_state = Default;
 
 	 
@@ -40,7 +40,7 @@ always @(posedge clk) begin
 		T3 :#40 Present_state = T4;
 		T4 :#40 Present_state = T5;
 		T5 :#40 Present_state = T6;
-		T6 :#40 Present_state = T7;
+		
 	endcase
 end
 
@@ -161,8 +161,8 @@ always @(Present_state) begin
 								
 								//Cout, ADD, ZIn
 								
-								#10 busSelect[23] <= 1; enable[18] <= 1;
-								#15 busSelect[23] <= 0; enable[18] <= 0;
+								#10 busSelect[23] <= 1; Control_Signals <= 1; enable[18] <= 1;
+								#15 busSelect[23] <= 0; Control_Signals <= 0; enable[18] <= 0;
 		end
 		T6: begin
 
