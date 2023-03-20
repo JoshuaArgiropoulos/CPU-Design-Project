@@ -3,7 +3,9 @@ module datapath (
     input clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM,// IncPC,
     input [4:0] Control_Signals,
     output [31:0] TrueBusMuxOut, OutputUnit, 
-	 output wire [31:0] r1, r2, r0, mdr, zhi, zlo, pc, ir, hi, lo, temp
+	output wire [31:0] r1, r2, r0, mdr, zhi, zlo, pc, ir, hi, lo, temp,
+	
+	output wire CONFFOut
 );
 	 //connect registers output to bus mux
 	 wire [31:0] BusMuxIn_R0;
