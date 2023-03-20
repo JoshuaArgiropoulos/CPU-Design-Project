@@ -1,11 +1,10 @@
 module datapath (
 	 input [31:0] enable, busSelect, InPortData, /*MDataIn,*/
-    input clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM,// IncPC,
+    input clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, // IncPC,
     input [4:0] Control_Signals,
     output [31:0] TrueBusMuxOut, OutputUnit, 
-	output wire [31:0] r1, r2, r0, mdr, zhi, zlo, pc, ir, 
-	
-	output wire CONFFOut
+	 output wire [31:0] r1, r2, r0, mdr, zhi, zlo, pc, ir, //hi, lo, temp
+	 output wire CONFFOut
 );
 	 //connect registers output to bus mux
 	 wire [31:0] BusMuxIn_R0;
@@ -48,7 +47,7 @@ module datapath (
 	 wire [31:0] IROut;
 	 wire [15:0] regsIn;
 	 wire [15:0] regsOut;
-	 wire CONFFOut;
+	 //wire [31:0] CONFFOut;
 
 	 // Modules
    
@@ -83,22 +82,23 @@ module datapath (
     Register R14(clk, clr, enable[14], BusMuxOut, BusMuxIn_R14);
     Register R15(clk, clr, enable[15], BusMuxOut, BusMuxIn_R15);*/
 	 
-	 Register R0(clk, clr, regsIn[0], BusMuxOut, BusMuxIn_R0);
-    Register R1(clk, clr, regsIn[1], BusMuxOut, BusMuxIn_R1);
-    Register R2(clk, clr, regsIn[2], BusMuxOut, BusMuxIn_R2);
-    Register R3(clk, clr, regsIn[3], BusMuxOut, BusMuxIn_R3);
-    Register R4(clk, clr, regsIn[4], BusMuxOut, BusMuxIn_R4);
-    Register R5(clk, clr, regsIn[5], BusMuxOut, BusMuxIn_R5);
-    Register R6(clk, clr, regsIn[6], BusMuxOut, BusMuxIn_R6);
-    Register R7(clk, clr, regsIn[7], BusMuxOut, BusMuxIn_R7);
-    Register R8(clk, clr, regsIn[8], BusMuxOut, BusMuxIn_R8);
-    Register R9(clk, clr, regsIn[9], BusMuxOut, BusMuxIn_R9);
-    Register R10(clk, clr, regsIn[10], BusMuxOut, BusMuxIn_R10);
-    Register R11(clk, clr, regsIn[11], BusMuxOut, BusMuxIn_R11);
-    Register R12(clk, clr, regsIn[12], BusMuxOut, BusMuxIn_R12);
-    Register R13(clk, clr, regsIn[13], BusMuxOut, BusMuxIn_R13);
-    Register R14(clk, clr, regsIn[14], BusMuxOut, BusMuxIn_R14);
-    Register R15(clk, clr, regsIn[15], BusMuxOut, BusMuxIn_R15);
+	 //Register R0(clk, clr, regsIn[0], BusMuxOut, BusMuxIn_R0);
+	 RevisedR0 R0 (clk, clr, regsIn[0] | enable[0], BAout, BusMuxOut, BusMuxIn_R0);
+    Register R1(clk, clr, regsIn[1] | enable[1], BusMuxOut, BusMuxIn_R1);
+    Register R2(clk, clr, regsIn[2] | enable[2], BusMuxOut, BusMuxIn_R2);
+    Register R3(clk, clr, regsIn[3] | enable[3], BusMuxOut, BusMuxIn_R3);
+    Register R4(clk, clr, regsIn[4] | enable[4], BusMuxOut, BusMuxIn_R4);
+    Register R5(clk, clr, regsIn[5] | enable[5], BusMuxOut, BusMuxIn_R5);
+    Register R6(clk, clr, regsIn[6] | enable[6], BusMuxOut, BusMuxIn_R6);
+    Register R7(clk, clr, regsIn[7] | enable[7], BusMuxOut, BusMuxIn_R7);
+    Register R8(clk, clr, regsIn[8] | enable[8], BusMuxOut, BusMuxIn_R8);
+    Register R9(clk, clr, regsIn[9] | enable[9], BusMuxOut, BusMuxIn_R9);
+    Register R10(clk, clr, regsIn[10] | enable[10], BusMuxOut, BusMuxIn_R10);
+    Register R11(clk, clr, regsIn[11] | enable[11], BusMuxOut, BusMuxIn_R11);
+    Register R12(clk, clr, regsIn[12] | enable[12], BusMuxOut, BusMuxIn_R12);
+    Register R13(clk, clr, regsIn[13] | enable[13], BusMuxOut, BusMuxIn_R13);
+    Register R14(clk, clr, regsIn[14] | enable[14], BusMuxOut, BusMuxIn_R14);
+    Register R15(clk, clr, regsIn[15] | enable[15], BusMuxOut, BusMuxIn_R15);
     
     Register HI(clk, clr, enable[16], BusMuxOut, BusMuxIn_HI);
     Register LO(clk, clr, enable[17], BusMuxOut, BusMuxIn_LO);
@@ -127,7 +127,7 @@ module datapath (
 	 Inport inprt(clr, clk, InPortData, BusMuxIn_INPORT);
 	 Outport otprt(clr, clk, enable, BusMuxOut, OutputUnit);
 	 
-	 ConnectedBus dpBus(busSelect, BusMuxIn_R0, BusMuxIn_R1, BusMuxIn_R2, BusMuxIn_R3,
+	 ConnectedBus dpBus(busSelect | regsOut, BusMuxIn_R0, BusMuxIn_R1, BusMuxIn_R2, BusMuxIn_R3,
 	 BusMuxIn_R4, BusMuxIn_R5, BusMuxIn_R6, BusMuxIn_R7, BusMuxIn_R8,
 	 BusMuxIn_R9, BusMuxIn_R10, BusMuxIn_R11, BusMuxIn_R12, BusMuxIn_R13,
 	 BusMuxIn_R14, BusMuxIn_R15, BusMuxIn_HI, BusMuxIn_LO, BusMuxIn_ZHI,
