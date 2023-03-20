@@ -9,7 +9,10 @@ module DP_Branch_TB;
 reg [31:0] enable, busSelect, inPort, MDataIn;
 reg clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM;//, IncPC;
 reg [4:0] Control_Signals;
-wire [31:0] busMuxOut, r1, r2, r3, mdr, zhi, zlo, pc, ir;//, hi, lo, temp;
+wire [31:0] busMuxOut, r1, r2, r3, mdr, zhi, zlo, pc, ir;
+wire CONFFOut;
+
+//, hi, lo, temp;
 //wire [63:0] temp;
 
 parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011, 
@@ -19,7 +22,7 @@ reg [3:0] Present_state = Default;
 
 	 
 
-datapath DUT(enable, busSelect, inPort, /*MDataIn,*/ clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, Control_Signals, busMuxOut, r1, r2, r3, mdr, zhi, zlo, pc, ir);//, hi, lo, temp); 
+datapath DUT(enable, busSelect, inPort, /*MDataIn,*/ clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, Control_Signals, busMuxOut, r1, r2, r3, mdr, zhi, zlo, pc, ir, CONFFOut);//, hi, lo, temp); 
 
 
 
@@ -151,8 +154,8 @@ always @(Present_state) begin
 								
 								
 								//Gra, Rout and CONIN
-								#10 Gra <= 1; busSelect[0] <= 1; enable[27] <= 1;
-								#15 Gra <= 0; busSelect[0] <= 0; enable[27] <= 0;
+								#10 Gra <= 1; Rout <= 1; enable[27] <= 1;
+								#15 Gra <= 0; Rout <= 0; enable[27] <= 0;
 		end
 		T4: begin
 								
@@ -172,11 +175,15 @@ always @(Present_state) begin
 		end
 		T6: begin
 								//Zlow out, CON -> PC in
-								//Need to find a way to CON -> PCin and preload branch
+
 								#10 busSelect[19] <= 1;
 								
+								if (CONFFOut)
+									enable[20] <= 1;
 								
-								#15  busSelect[19] <= 0;
+								
+								
+								#15  busSelect[19] <= 0; enable[20] <= 0;
 	
 		end
 	endcase
