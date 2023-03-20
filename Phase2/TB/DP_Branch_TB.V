@@ -36,18 +36,18 @@ end
 always @(posedge clk) begin
 	case(Present_state)
 		Default : Present_state = Reg_load1a;
-		Reg_load1a :#40 Present_state = Reg_load1b;
-		Reg_load1b :#40 Present_state = Reg_load2a;
-		Reg_load2a :#40 Present_state = Reg_load2b;
-		Reg_load2b :#40 Present_state = Reg_load3a;
-		Reg_load3a :#40 Present_state = Reg_load3b;
-		Reg_load3b :#40 Present_state = T0;
-		T0 :#40 Present_state = T1;
-		T1 :#40 Present_state = T2;
-		T2 :#40 Present_state = T3;
-		T3 :#40 Present_state = T4;
-		T4 :#40 Present_state = T5;
-		T5 :#40 Present_state = T6;
+		Reg_load1a :#30 Present_state = Reg_load1b;
+		Reg_load1b :#30 Present_state = Reg_load2a;
+		Reg_load2a :#30 Present_state = Reg_load2b;
+		Reg_load2b :#30 Present_state = Reg_load3a;
+		Reg_load3a :#30 Present_state = Reg_load3b;
+		Reg_load3b :#30 Present_state = T0;
+		T0 :#30 Present_state = T1;
+		T1 :#30 Present_state = T2;
+		T2 :#30 Present_state = T3;
+		T3 :#30 Present_state = T4;
+		T4 :#30 Present_state = T5;
+		T5 :#30 Present_state = T6;
 		
 	endcase
 end
@@ -78,49 +78,39 @@ always @(Present_state) begin
 								
 		end
 		Reg_load1a: begin
-								//MDataIn <= 32'b0;
-								//MD_Read = 0; enable[21] = 0;
-								//#10 MD_Read <= 1; enable[21] <= 1;
-								////MDataIn <= 32'b0011;
-								//#15 MD_Read <= 0; enable[21] <= 0;
-								#25 enable[20] <= 1;
+								  #0 enable[20] <= 1;
+                          #40 enable[20] <= 0;
 								
 		end
 		Reg_load1b: begin
-								//#10 busSelect[21] <= 1; enable[2] <= 1;
-								//#15 busSelect[21] <= 0; enable[2] <= 0;
-								#25 enable[20] <= 0;
+								
+								
 		end
 		Reg_load2a: begin
-								//MDataIn <= 32'b0110;
-								//#10 MD_Read <= 1; enable[21] <= 1;
-								//MDataIn <= 32'b0010;
-								//#15 MD_Read <= 0; enable[21] <= 0;
-								//enable[1] <= 1; ReadRAM <= 1;
+									//Whats  loading in, inport enable and which reg
+		
+								  #0 inPort <= 32'd25; busSelect[22] <= 1; enable[6] <= 1;
+								  
+								  #40 busSelect[22] <= 0; enable[2] <= 0;
 		end
 		Reg_load2b: begin
-								#10 busSelect[21] <= 1; enable[3] <= 1;
-								#15 busSelect[21] <= 0; enable[3] <= 0;
+								
 		end
 		Reg_load3a: begin
-								MDataIn <= 32'b0;
-								#10 MD_Read <= 1; enable[21] <= 1;
-								//MDataIn <= 32'b0;
-								#15 MD_Read <= 0; enable[21] <= 0;
+								
 		end
 		Reg_load3b: begin
-								#10 busSelect[21] <= 1; enable[1] <= 1;
-								#15 busSelect[21] <= 0; enable[1] <= 0;
+								
 		end
 		T0: begin
-								#10 busSelect[20] <= 1;//PC
+								#0 busSelect[20] <= 1;//PC
 								enable[25] <= 1;//MAR
 								//enable[27] <= 1;//incPC bit is bit 27
 								//INC PC
 								Control_Signals <= 14;
 								enable[18] <= 1;//Zin
 								
-								#15 busSelect[20] <= 0;
+								#40 busSelect[20] <= 0;
 								enable[25] <= 0;//MAR
 								//enable[27] <= 0;//incPC bit is bit 27
 								Control_Signals <= 0;
@@ -128,7 +118,7 @@ always @(Present_state) begin
 																
 		end
 		T1: begin
-								#10 busSelect[19] <= 1;//zLowOut
+								#0 busSelect[19] <= 1;//zLowOut
 								enable[20] <= 1;//pcIn
 								enable[21] <= 1;//MDRin
 								MD_Read <= 1;//read
@@ -136,16 +126,16 @@ always @(Present_state) begin
 								//MDataIn <= 32'h0000000010000;//Opcode need to get info into MDR from RAM
 								ReadRAM <= 1;
 								
-								#15 busSelect[19] <= 0;
+								#40 busSelect[19] <= 0;
 								busSelect[19] <= 0;
 								enable[20] <= 0;
 								ReadRAM <= 0;
 		end
 		T2: begin
 							
-								#10 enable[21] <= 0; MD_Read <= 0; busSelect[21] <= 1; enable[24] <= 1;
+								#0 enable[21] <= 0; MD_Read <= 0; busSelect[21] <= 1; enable[24] <= 1;
 								
-								#15 busSelect[21] <= 0; enable[24] <= 0;
+								#40 busSelect[21] <= 0; enable[24] <= 0;
 
 		end
 		T3: begin
@@ -154,16 +144,16 @@ always @(Present_state) begin
 								
 								
 								//Gra, Rout and CONIN
-								#10 Gra <= 1; Rout <= 1; enable[27] <= 1;
-								#15 Gra <= 0; Rout <= 0; enable[27] <= 0;
+								#0 Gra <= 1; Rout <= 1; enable[27] <= 1;
+								#40 Gra <= 0; Rout <= 0; enable[27] <= 0;
 		end
 		T4: begin
 								
 								
 								//PC out and Y in
 								
-								#10 busSelect[20] <=1; enable[19] <= 1;
-								#15 busSelect[20] <=0; enable[19] <= 0;
+								#0 busSelect[20] <=1; enable[19] <= 1;
+								#40 busSelect[20] <=0; enable[19] <= 0;
 		end
 		T5: begin
 								
@@ -176,14 +166,14 @@ always @(Present_state) begin
 		T6: begin
 								//Zlow out, CON -> PC in
 
-								#10 busSelect[19] <= 1;
+								#0 busSelect[19] <= 1;
 								
 								if (CONFFOut)
 									enable[20] <= 1;
 								
 								
 								
-								#15  busSelect[19] <= 0; enable[20] <= 0;
+								#40  busSelect[19] <= 0; enable[20] <= 0;
 	
 		end
 	endcase
