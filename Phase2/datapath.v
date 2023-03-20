@@ -46,7 +46,7 @@ module datapath (
 	 wire [31:0] IROut;
 	 wire [15:0] regsIn;
 	 wire [15:0] regsOut;
-	 wire [31:0] CONFFOut;
+	 wire CONFFOut;
 
 	 // Modules
    
