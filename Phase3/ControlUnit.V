@@ -9,7 +9,8 @@ module control_unit (
 	output [4:0] Control_Signals
  
  
-	input [31:0] TrueBusMuxOut, OutputUnit, 
+	input [31:0] TrueBusMuxOut, OutputUnit,
+	//^ might be wrong
  
 	input wire [31:0] ir, 
 	
@@ -18,9 +19,10 @@ module control_unit (
 
 parameter reset_state = 4’b0000, fetch0 = 4’b0001, fetch1 = 4’b0010, fetch2 = 4’b0011,
  
-	add3 = 4’b0100, add4 = 4’b0101, add5 = 4’b0110, …;
+	add3 = 4’b0100, add4 = 4’b0101, add5 = 4’b0110, //Continue here
 	 
-	 // finish
+	 // finish and understand the different states
+	
 	 
  reg [3:0] present_state = reset_state; 
 	 // adjust the bit pattern based on the number of states
@@ -29,9 +31,12 @@ parameter reset_state = 4’b0000, fetch0 = 4’b0001, fetch1 = 4’b0010, fetch
 	 always @(posedge Clock, posedge Reset, posedge Stop) 
  
 		 begin
-	 if (Reset ==1’b1) present_state = reset_state;
+	
+			 if (Reset ==1’b1) present_state = reset_state;
 
-	 if (Stop == 1'b1) present_state = **********HALT******;
+			 if (Stop == 1'b1) present_state = //HALT CODE HERE
+		 
+		//IF STOP = 1, the program should call the halt code. Work in progress
 		 
  
 	 else case (present_state)
