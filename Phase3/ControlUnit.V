@@ -33,17 +33,24 @@ parameter reset_state = 4’b0000, fetch0 = 4’b0001, fetch1 = 4’b0010, fetch
 		 fetch1 : present_state = fetch2;
 
 		 fetch2 : begin
- 
+ 			@(posedge Clock);
+			 
 			 case (IR[31:27]) // inst. decoding based on the opcode to set the next state
 
 				 5’b00011 : present_state = add3; // this is the add instruction
  ⁞
- endcase
-end
-add3 : present_state = add4;
-add4 : present_state = add5;
+ 
+			 endcase
+
+		 end
+
+		 add3 : present_state = add4;
+
+		 add4 : present_state = add5;
 ⁞
- endcase
+ 
+	 endcase
+
  end
 
 	 always @(present_state) // do the job for each state
