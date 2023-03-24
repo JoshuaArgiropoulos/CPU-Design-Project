@@ -1,9 +1,9 @@
 module datapath (
+	 input clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, // IncPC,
 	 input [31:0] enable, busSelect, InPortData, /*MDataIn,*/
-    input clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, // IncPC,
     input [4:0] Control_Signals,
     output [31:0] TrueBusMuxOut, OutputUnit, 
-	 output wire [31:0] r1, r2, r0, mdr, zhi, zlo, pc, ir, //hi, lo, temp
+	 output wire [31:0] r0, r1, r2, mdr, zhi, zlo, pc, ir, //hi, lo, temp
 	 output wire CONFFOut
 );
 	 //connect registers output to bus mux
@@ -104,12 +104,9 @@ module datapath (
     Register LO(clk, clr, enable[17], BusMuxOut, BusMuxIn_LO);
 	 Register64bit Z(clk, clr, enable[18], ZOut, BusMuxIn_ZHI, BusMuxIn_ZLO); //was 24
 	 Register Y(clk, clr, enable[19], BusMuxOut, YOut); // was 27
-	 //Register ZHI(clk, clr, enable[18], BusMuxIn_ZHI, BusMuxIn_ZRHI);
-    //Register ZLO(clk, clr, enable[19], BusMuxIn_ZLO, BusMuxIn_ZRLO);
 	 Register PC(clk, clr, enable[20], BusMuxOut, BusMuxIn_PC);
 	 
-    MDR MdrReg(/*MDataIn*/ RAMOut, BusMuxOut, clr, clk, enable[21], MD_Read, BusMuxIn_MDR);
-	 //Register INPORT(clk, clr, enable[22], InPortData, BusMuxIn_INPORT);
+    MDR MdrReg(RAMOut, BusMuxOut, clr, clk, enable[21], MD_Read, BusMuxIn_MDR);
 	 Register IR(clk, clr, enable[24], BusMuxOut, IROut);
 	 Register MAR(clk, clr, enable[25], BusMuxOut, AddressSignalRAM); //output change from BusMuxOut
 	 Register OUTPORT(clk, clr, enable[26], BusMuxOut, BusMuxIn_OUTPORT);
