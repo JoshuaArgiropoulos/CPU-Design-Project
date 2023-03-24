@@ -10,7 +10,7 @@ wire [31:0] busMuxOut, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r1
 parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, /*Reg_load2a = 4'b0011, 
 			 Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, T0 = 4'b0111, 
 			 T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100, T6 = 4'b1101, T7 = 4'b1110;*/
-			 T0 = 4'b0011, T1 = 4'b0100, T2 = 4'b0101, T3 = 4'b0110, T4 = 4'b0111, T5 = 4'b1000, T6 = 4'b1001, T7 = 4'b1010;
+			 T0 = 4'b0011, T1 = 4'b0100, T2 = 4'b0101, T3 = 4'b0110, T4 = 4'b0111, T5 = 4'b1000, T6 = 4'b1001;
 reg [3:0] Present_state = Default;
 
 	 
@@ -123,10 +123,6 @@ always @(Present_state) begin
 		T6: begin
 								#0 Gra <= 1; BAout <= 1; Rout <= 1; WriteRAM <= 1; 
 								#40 Gra <= 0; BAout <= 0; Rout <= 0; WriteRAM <= 0;
-		end
-		T7: begin
-								#0 ;//busSelect[21] <= 1; Gra <= 1; Rin <= 1;//enables destination reg and imputs desired value from MDR
-								#40 ;//busSelect[21] <= 0; Gra <= 0; Rin <= 0;
 		end
 	endcase
 end
