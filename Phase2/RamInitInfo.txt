@@ -1,0 +1,11 @@
+Line of Ram	| Purpose (PC value = line - 1)
+
+Operations:
+1:ld R1 $75
+2:ld R0 $45(R1)
+3:ldi R1 $75
+
+
+Data: (line = addr + 1)
+118:location of $75
+75:location of $45 + 5 (for "2:ld R0 $45(R1)")
