@@ -117,6 +117,55 @@ parameter reset_state = 4’b0000, fetch0 = 4’b0001, fetch1 = 4’b0010, fetch
 					 //Zin <= 0;
 
 				 end
+				 
+				 fetch1: begin
+					 
+			
+					  //PCout 
+					 busSelect[20] <= 0;
+					 //PCout <= 0; 
+					 //MAR IN
+					 enable[25] <= 0;
+					 //MAR_enable <= 0; 
+			
+					 //MDR 
+					 enable[21] <= 1;
+					 //MDR_enable <= 1; 
+					 
+					 //MD READ
+					 MD_Read <= 1;
+					 
+					 //Z low 
+					 busSelect[19] <= 1;
+					 //ZLowout <= 1; 
+		end 
+		fetch2: begin
+			
+			 //MDR 
+			enable[21] <= 0;
+			 //MD READ
+			 MD_Read <= 0;
+			//Z low 
+			busSelect[19] <= 0;
+			
+					
+			//MDR out
+			busSelect[21] <= 1;
+			
+			//IR enable 
+			enable[24] <= 1;
+			
+			//PC enable 
+			enable[20] <=1;
+			
+			//INC PC
+			Control_Signals <= d'd14;
+			
+			
+			// PC enable low 
+			#30 enable[20] <= 0;
+		end 
+				 
 
 				 add3: begin
 
