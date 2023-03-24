@@ -1,15 +1,19 @@
 `timescale 1ns/10ps
  module control_unit (
- output reg Gra, Grb, Grc, Rin, …, Rout, // define the inputs and outputs to your Control Unit
- Yin, Zin, PCout, IncPC, …, MARin,
-Read, Write, …, Clear,
- ADD, AND, …, SHR,
- input [31:0] IR,
- input Clock, Reset, Stop, …, Con_FF);
+ output reg clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM,
+  
+ output [31:0] enable, busSelect, InPortData,
+ output [4:0] Control_Signals
+ 
+  input [31:0] TrueBusMuxOut, OutputUnit, 
+  input wire [31:0] ir, 
+	 input wire CONFFOut, clk, externalReset, externalStop
+  
 parameter reset_state = 4’b0000, fetch0 = 4’b0001, fetch1 = 4’b0010, fetch2 = 4’b0011,
  add3 = 4’b0100, add4 = 4’b0101, add5 = 4’b0110, …;
  reg [3:0] present_state = reset_state; // adjust the bit pattern based on the number of states
-always @(posedge Clock, posedge Reset) // finite state machine; if clock or reset rising-edge
+
+  always @(posedge Clock, posedge Reset) // finite state machine; if clock or reset rising-edge
  begin
  if (Reset == 1’b1) present_state = reset_state;
  else case (present_state)
