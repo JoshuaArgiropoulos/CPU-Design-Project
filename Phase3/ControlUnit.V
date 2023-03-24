@@ -1,23 +1,34 @@
 `timescale 1ns/10ps
- module control_unit (
- output reg clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM,
+
+module control_unit (
+
+	output reg MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM,
   
- output [31:0] enable, busSelect, InPortData,
- output [4:0] Control_Signals
+	output [31:0] enable, busSelect, InPortData,
  
-  input [31:0] TrueBusMuxOut, OutputUnit, 
-  input wire [31:0] ir, 
-	 input wire CONFFOut, clk, Reset, Stop
+	output [4:0] Control_Signals
+ 
+ 
+	input [31:0] TrueBusMuxOut, OutputUnit, 
+ 
+	input wire [31:0] ir, 
+	
+	input wire CONFFOut, clk, Reset, Stop
   
+
 parameter reset_state = 4’b0000, fetch0 = 4’b0001, fetch1 = 4’b0010, fetch2 = 4’b0011,
- add3 = 4’b0100, add4 = 4’b0101, add5 = 4’b0110, …;
+ 
+	add3 = 4’b0100, add4 = 4’b0101, add5 = 4’b0110, …;
+	 
+	 // finish
 	 
  reg [3:0] present_state = reset_state; 
 	 // adjust the bit pattern based on the number of states
 
 	 
-  always @(posedge Clock, posedge Reset) // finite state machine; if clock or reset rising-edge
- begin
+	 always @(posedge Clock, posedge Reset, posedge Stop) 
+ 
+		 begin
 	 if (Reset ==1’b1) present_state = reset_state;
 
 	 if (Stop == 1'b1) present_state = **********HALT******;
@@ -60,21 +71,50 @@ parameter reset_state = 4’b0000, fetch0 = 4’b0001, fetch1 = 4’b0010, fetch
 			 case (present_state) // assert the required signals in each state
 
 				 reset_state: begin
+					 
+					Run <= 1;
+					 
+					MD_Read <= 0;
+					Gra <= 0;
+					Grb <= 0;
+					Grc <= 0;
+					Rin <= 0;
+					Rout <= 0;
+					BAout <= 0;
+					WriteRAM <= 0;
+					ReadRAM <= 0;
+					enable <= 0;
+					busSelect <= 0;
+					InPortData <= 0;
+					Control_Signals <= 0;
+					
+					
 
-					 Gra <= 0; Grb <= 0; Grc <= 0; Yin <= 0; // initialize the signals
+ 
  ⁞
 
 				 end
 
 				 fetch0: begin
+					 
+					 
+					 //PCout 
+					 
+					 busSelect[20] <= 1;
 
-					 PCout <= 1; // see if you need to de-assert these signals
+					 //PCout <= 1; // see if you need to de-assert these signals
+					 
+					 //MAR IN
+					 enable[25] <= 1;
+					 //MARin <= 1;
 
-					 MARin <= 1;
-
-					 IncPC <= 1;
-
-					 Zin <= 0;
+					 //Inc PC
+					 Control_Signals <= 4'd14;
+					// IncPC <= 1;
+					
+					 //Z In 
+					 enable[18] <= 0;
+					 //Zin <= 0;
 
 				 end
 
@@ -82,7 +122,9 @@ parameter reset_state = 4’b0000, fetch0 = 4’b0001, fetch1 = 4’b0010, fetch
 
 					 Grb <= 1; Rout <= 1;
 
-					 Yin <= 0;
+					 //Y IN
+					 enable[19] <= 0;
+					 //Yin <= 0;
 
 				 end
 ⁞
