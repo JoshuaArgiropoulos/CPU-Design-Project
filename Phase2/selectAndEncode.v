@@ -6,7 +6,6 @@ module selectAndEncode(
 );
 
 	reg [3:0] RaGra, RbGrb, RcGrc, DecodeIn;
-	reg [15:0] DecodeOut;
 	
 	initial begin
 	regsIn <= 16'b0;
@@ -15,13 +14,15 @@ module selectAndEncode(
 
 always @(*) begin
 
-	RaGra = IRout[26:23] & Gra;
-	RbGrb = IRout[22:19] & Grb;
-	RcGrc = IRout[18:15] & Grc;
+	RaGra = IRout[26:23] & {4{Gra}};
+	RbGrb = IRout[22:19] & {4{Grb}};
+	RcGrc = IRout[18:15] & {4{Grc}};
 	DecodeIn = RaGra | RbGrb | RcGrc;
 	
 	case(DecodeIn)
 		4'b0000 : begin
+					//regsIn <= 32'b0;
+					//regsOut <= 32'b0;
 					regsIn[0] <= Rin;
 					regsOut[0] <= Rout & BAout;
 		end
@@ -85,9 +86,81 @@ always @(*) begin
 					regsIn[15] <= Rin;
 					regsOut[15] <= Rout & BAout;
 		end
+		default : begin
+					regsIn <= 32'b0;
+					regsOut <= 32'b0;
+					end
 	endcase
+	if(~Rin) regsIn <= 32'b0;
+	if(~Rout) regsOut <= 32'b0;
 end
 
 	assign CSE = $signed({IRout[17], IRout[17:0]}); //this might need to be 18, not 100% sure
 
 endmodule
+
+/*case(DecodeIn)
+		5'b00001 : begin
+					regsIn[0] <= Rin;
+					regsOut[0] <= Rout & BAout;
+		end
+		5'b00010 : begin
+					regsIn[1] <= Rin;
+					regsOut[1] <= Rout & BAout;
+		end
+		5'b00011 : begin
+					regsIn[2] <= Rin;
+					regsOut[2] <= Rout & BAout;
+		end
+		5'b00100 : begin
+					regsIn[3] <= Rin;
+					regsOut[3] <= Rout & BAout;
+		end
+		5'b00101 : begin
+					regsIn[4] <= Rin;
+					regsOut[4] <= Rout & BAout;
+		end
+		5'b00110 : begin
+					regsIn[5] <= Rin;
+					regsOut[5] <= Rout & BAout;
+		end
+		5'b00111 : begin
+					regsIn[6] <= Rin;
+					regsOut[6] <= Rout & BAout;
+		end
+		5'b01000 : begin
+					regsIn[7] <= Rin;
+					regsOut[7] <= Rout & BAout;
+		end
+		5'b01001 : begin
+					regsIn[8] <= Rin;
+					regsOut[8] <= Rout & BAout;
+		end
+		5'b01010 : begin
+					regsIn[9] <= Rin;
+					regsOut[9] <= Rout & BAout;
+		end
+		5'b01011 : begin
+					regsIn[10] <= Rin;
+					regsOut[10] <= Rout & BAout;
+		end
+		5'b01100 : begin
+					regsIn[11] <= Rin;
+					regsOut[11] <= Rout & BAout;
+		end
+		5'b01101 : begin
+					regsIn[12] <= Rin;
+					regsOut[12] <= Rout & BAout;
+		end
+		5'b01110 : begin
+					regsIn[13] <= Rin;
+					regsOut[13] <= Rout & BAout;
+		end
+		5'b01111 : begin
+					regsIn[14] <= Rin;
+					regsOut[14] <= Rout & BAout;
+		end
+		5'b10000 : begin
+					regsIn[15] <= Rin;
+					regsOut[15] <= Rout & BAout;
+		end*/
