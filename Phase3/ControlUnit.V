@@ -238,11 +238,54 @@ parameter Reset_state= 8'b00000000, fetch0 = 8'b00000001, fetch1 = 8'b00000010, 
 					 #15 Rin <= 0;
 					
 					 #15 busSelect[21]<= 0; Gra <= 0;
-				 
-				 
-				 halt3: begin
-					 Run <= 0;
 				 end
+					 
+				 BR3: begin
+							
+					 #0 Gra <= 1; Rout <= 1; enable[27] <= 1;//Puts preloaded reg into CONFF
+						
+					 #40 Gra <= 0; Rout <= 0; enable[27] <= 0;
+		
+				end	
+				 
+			
+					
+				 BR4: begin
+					
+					 #0 busSelect[20] <=1; enable[19] <= 1;//PCout Yin
+						
+					
+					 #40 busSelect[20] <=0; enable[19] <= 0;
+		
+					
+				 end
+		
+				 BR5: begin
+					
+					 #0 busSelect[23] <=1; Control_Signals <= 15; enable[18] <= 1;//adds CSE with PC??, stores in Zlow
+						
+					 #40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+		
+				 end
+		
+				 BR6: begin
+	
+					
+					 if(CONFFOut)begin						
+						 #0 busSelect[19] <= 1; enable[20] <= 1;//CSE -> PC
+							
+				
+					 end
+						
+					 #40 busSelect[19] <= 0; enable[20] <= 0;
+				end			 
+				 
+				 
+					 halt3: begin
+					 
+						 Run <= 0;
+				 
+					 end
 ⁞
 
 			 endcase
