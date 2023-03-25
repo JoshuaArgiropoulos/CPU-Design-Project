@@ -1,0 +1,16 @@
+`timescale 1ns/10ps
+module divisionTB;
+
+reg [31:0] dividend, divisor;
+
+wire [31:0] quotient, remainder;
+
+division division_instance(quotient, remainder, dividend, divisor);
+
+initial begin
+
+dividend <= 32'b100111;
+divisor <= 32'b11;
+end
+
+endmodule

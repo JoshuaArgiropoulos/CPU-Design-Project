@@ -5,12 +5,12 @@ reg [31:0] multiplicand, multiplier;
 
 wire [31:0] resLo, resHi;
 
-multiplication3bit multiplication_instance(multiplicand, multiplier, resLo, resHi);
+multiplication5bit multiplication_instance(multiplicand, multiplier, resLo, resHi);
 
 initial begin
 
-multiplicand <= 32'b00000000000000000000000000000100;//00000000000000000000000000000000
-multiplier <= 32'b00000000000000000000000000000010;
+multiplicand <= 32'b111111111111111111111111111111100;//00000000000000000000000000000000
+multiplier   <= 32'b000000000000000000000000000000110;
 end
 
 endmodule

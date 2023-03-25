@@ -157,9 +157,9 @@ for (i = 0; i <= 31; i = i + 1) begin
 	//$display("The value of PP is %d", partial_product);
 	//partial_product = partial_product + {{32{multiplicand_reg[31]}}, multiplicand_reg} * three_bit_booth[j]; //{ {2{x[5]}}, x }
 	end
-	$display("The value of partial_product is %d", partial_product);
-	$display("The value of multiplicand is %d", multiplicand_reg);
-	$display("The value of multiplier is %d", multiplier_reg);
+	//$display("The value of partial_product is %d", partial_product);
+	//$display("The value of multiplicand is %d", multiplicand_reg);
+	//$display("The value of multiplier is %d", multiplier_reg);
  end
  assign resLo = partial_product[31:0];
  assign resHi = partial_product[63:32];

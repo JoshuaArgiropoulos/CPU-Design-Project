@@ -1,13 +1,16 @@
 module ALU (value1, value2, select, result);
 
 input [31:0] value1, value2;
-input [3:0] select;
+input [4:0] select;
 output reg [63:0] result;
+reg [31:0] IncPc = 1;
 
-wire [31:0] addOut, subOut, andOut, orOut, negOut, notOut, shrOut, shlOut, rorOut, rolOut;
+wire [31:0] addOut, subOut, andOut, orOut, negOut, notOut, shrOut, shlOut, rorOut, rolOut, addIOut, andIOut, orIOut, IncPcAddOut, CONFFPcAddOut;
 wire [63:0] divOut, mulOut;
 
 add aluAdd (value1, value2, addOut);
+add PcIncAdd (IncPc, value2, IncPcAddOut);
+add CONFFPcIncAdd (value1, value2 + 1, CONFFPcAddOut);
 sub aluSub (value1, value2, subOut);
 andOp aluAnd (value1, value2, andOut);
 orOp aluOr (value1, value2, orOut);
@@ -17,9 +20,11 @@ shRight aluShr (value1, value2, shrOut);
 shLeft aluShl (value1, value2, shlOut);
 rotateRight aluRor (value1, value2, rorOut);
 rotateLeft aluRol (value1, value2, rolOut);
+shRightA aluShrA (value1, value2, shrOutA);
 
 division aluDiv (value1, value2, divOut[31:0], divOut[63:32]); //low = quotient high = remainder
-multiplication3bit aluMul (value1, value2, mulOut[31:0], mulOut[63:32]);
+multiplication5bit aluMul (value1, value2, mulOut[31:0], mulOut[63:32]);
+
 
 always @(*) begin
 
@@ -64,14 +69,26 @@ always @(*) begin
 					result[31:0] <= rolOut;
 					result[63:32] <= 32'b0;
 			   end
-		4'd11:begin
+		4'd11:begin//div
 					result[31:0] <= divOut[31:0];
 					result[63:32] <= divOut[63:32];
 			   end
-		4'd12:begin
+		4'd12:begin//mul
 					result[31:0] <= mulOut[31:0];
 					result[63:32] <= mulOut[63:32];
 			   end
+		4'd13:begin//shrA
+					result[31:0] <= shrOutA;
+					result[63:32] <= 32'b0;
+				end
+		4'd14:begin//IncPc
+					result[31:0] <= IncPcAddOut;
+					result[63:32] <= 32'b0;
+				end
+		4'd15:begin//IncPcCONFF
+					result[31:0] <= CONFFPcAddOut;
+					result[63:32] <= 32'b0;
+				end
 		default result[63:0] <= 64'b0;
 		endcase
 

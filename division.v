@@ -15,7 +15,6 @@ output [31:0] remainder;
     quotient_reg = dividend;
     remainder_reg = 32'b0;
 	 neg = 0;
-    // Perform division
 	 
 	 if(divisor_reg < 0 && quotient_reg < 0) begin
 	 divisor_reg = -divisor_reg;
@@ -36,7 +35,6 @@ output [31:0] remainder;
 		quotient_reg = quotient_reg << 1;
 		remainder_reg = remainder_reg << 1;
 		remainder_reg = remainder_reg + 1;
-		
 		end
 		else begin
 		quotient_reg = quotient_reg << 1;
@@ -45,10 +43,10 @@ output [31:0] remainder;
 		
 		if(remainder_reg >= 0) remainder_reg = remainder_reg - divisor_reg;
 		else remainder_reg = remainder_reg + divisor_reg;
-		$display("%b Less than zero, %d", quotient_reg, i);
-		$display("%d rem", remainder_reg, i);
+		//$display("%b Less than zero, %d", quotient_reg, i);
+		//$display("%d rem", remainder_reg, i);
 		if(remainder_reg >= 0) begin quotient_reg = quotient_reg + 1;
-		$display("QR %b %d", quotient_reg, i);
+		//$display("QR %b %d", quotient_reg, i);
 		end
   end
   if(remainder_reg < 0) remainder_reg = remainder_reg + divisor_reg;

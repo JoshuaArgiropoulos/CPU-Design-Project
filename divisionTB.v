@@ -10,8 +10,8 @@ division division_instance(dividend, divisor, quotient, remainder);
 
 initial begin
 
-dividend <= 32'b1010110;//00000000001011000011000000000011
-divisor <= 32'b10010;
+dividend <= 32'b00000000000000000000000000001110;//00000000000000000000000000000000
+divisor <=  32'b00000000000000000000000000000100;
 end
 
 endmodule

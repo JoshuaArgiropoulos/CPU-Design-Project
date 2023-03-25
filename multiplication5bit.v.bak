@@ -1,4 +1,4 @@
-module multiplication3bit(multiplicand, multiplier, resLo, resHi);
+module multiplication5bit(multiplicand, multiplier, resLo, resHi);
 input [31:0] multiplicand, multiplier;
 output[31:0] resLo, resHi;
 //output [63:0] result;

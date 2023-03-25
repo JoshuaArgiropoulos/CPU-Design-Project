@@ -1,0 +1,39 @@
+Line of Ram	| Purpose (PC value = line - 1)
+
+Operations:
+1:ld R1 $75
+2:ld R0 $45(R1)
+3:ldi R1 $75
+4:ldi R0 $45(R1)
+5:st $90, R4
+6:st $90(R4), R4
+7:addi R2, R3, -3
+8:andi R2, R3, $25
+9:ori R2, R3, $25
+10:brzr R6, 25
+11:brnz R6, 25
+12:brpl R6, 25
+13:brmi R6, 25
+14:jr R2
+15:jal R2
+16:mfhi R4
+17:mflo R6
+18:out R2
+19:in R3
+
+Data: (line = addr + 1)
+118:location of $75
+75:location of $45 + 5 (for "2:ld R0 $45(R1)")
+145:location of $90 (where r4 is stored) //only in sim ram
+
+
+
+add wave -position insertpoint  \
+sim:/DP_BRANCH_TB/DUT/Y/Q
+add wave -position insertpoint  \
+sim:/DP_BRANCH_TB/DUT/ALUPath/CONFFPcIncAdd/value1
+add wave -position insertpoint  \
+sim:/DP_BRANCH_TB/DUT/ALUPath/CONFFPcIncAdd/value2
+add wave -position insertpoint  \
+sim:/DP_BRANCH_TB/DUT/ALUPath/CONFFPcIncAdd/result
+restart -f

@@ -1,4 +1,4 @@
-module multiplication3bit(multiplicand, multiplier, resLo, resHi);
+module multiplication(multiplicand, multiplier, resLo, resHi);
 input [31:0] multiplicand, multiplier;
 output[31:0] resLo, resHi;
 //output [63:0] result;
@@ -11,7 +11,7 @@ output[31:0] resLo, resHi;
   integer i, n, j;
   reg [1:0] bit_pairs;
   integer booth_num[31:0];
-  integer three_bit_booth[10:0];
+  integer two_bit_booth[15:0];
   
  /*
  
@@ -85,60 +85,55 @@ for (i = 0; i <= 31; i = i + 1) begin
 		//$display("The value of bit_pairs is %b", bit_pairs);
 	//$display("The value of booth_num is %d", booth_num[i]);
 	end// for i end
-	//$display("The value of booth_num is %p", booth_num);
 	
-	for (n = 0; n <= 27; n = n + 3) begin 
-	if(n==0)three_bit_booth[0] = {booth_num[2]<<2} + {booth_num[1]<<1} + booth_num[0];
-	else three_bit_booth[n/3] = {booth_num[n+2] << 2} + {booth_num[n+1] << 1 } + booth_num[n];//{n-1}>>n
+	for (n = 0; n <= 31; n = n + 2) begin 
+	two_bit_booth[{n >> 1}] = {booth_num[n+1] << 1} + booth_num[n];
 	//$display("The value of n is %d", n);
-	//$display("The value of booth_num is %d %d %d", booth_num[n+2], booth_num[n+1], booth_num[n]);
-	//$display("The value of three_bit_booth is %d", three_bit_booth[n/3]);
-		//$display("The value of three_bit_booth is %p", three_bit_booth);
-
+	//$display("The value of booth_num is %d", booth_num[n]);
+	//$display("The value of two_bit_booth is %d", two_bit_booth[n/2]);
 	end // for n loop
-	three_bit_booth[10] = {booth_num[31]<<1} + booth_num[30];
-	//$display("The value of three_bit_booth is %p", three_bit_booth);
+	//$display("The value of two_bit_booth is %p", two_bit_booth);
 	//$display("The value of booth_num is %p", booth_num);
 	//$display("1The value of multiplicand_reg is %b", multiplicand_reg);
 	// partial_product = {{32{multiplicand_reg[31]}}, multiplicand_reg};
 	//$display("2The value of partial_product is %b", partial_product);
 	//$display("The value of partial_product is %b", partial_product);
-	//temp = multiplicand_reg * three_bit_booth[0];
+	//temp = multiplicand_reg * two_bit_booth[0];
 	//partial_product = partial_product + {{32{temp[31]}}, temp}; //{ {2{x[5]}}, x } {{32{multiplicand_reg[31]}}, multiplicand_reg}
 	//$display("The value of partial_product is %b", partial_product);
-	for (j = 0; j <= 9; j = j + 1) begin 
+	for (j = 0; j <= 15; j = j + 1) begin 
 	//$display("The value of j is %d", j);
 	
-	
-	//temp = (multiplicand_reg * three_bit_booth[j]) << 3*j;
-	//$display("The value m is %b", multiplicand_reg);
-	//$display("The value tbb is %d", three_bit_booth[j]);
-	//$display("The value of temp1 is %d", temp);
-	case (three_bit_booth[j])
-		-4: temp = -(multiplicand_reg << 2);
-		-3: temp = -((multiplicand_reg << 1) + multiplicand_reg);
+	//temp = (multiplicand_reg * two_bit_booth[j]) << {j << 1};
+		$display("The value m is %b", multiplicand_reg);
+	$display("The value tbb is %d", two_bit_booth[j]);
+	case (two_bit_booth[j])
 		-2: temp = -(multiplicand_reg << 1);
 		-1: temp = -multiplicand_reg;
 		0: temp = 0;
 		1: temp = multiplicand_reg;
 		2: temp = multiplicand_reg << 1;
-		3: temp = (multiplicand_reg << 1) + multiplicand_reg;
-		4: temp = multiplicand_reg << 2;
       default: temp = 0;
     endcase
-	 temp = temp << {(j << 1) + j};
-	//$display("The value of temp is %d", temp);
+    temp = temp << {j << 1};
+		$display("The value of temp is %b", temp);
+
+	//$display("The value of temp is %b", temp);
+	
 	partial_product = partial_product + temp;
-	//partial_product = partial_product + {{31{temp[32]}}, temp};
-	//$display("The value of PP is %d", partial_product);
-	//partial_product = partial_product + {{32{multiplicand_reg[31]}}, multiplicand_reg} * three_bit_booth[j]; //{ {2{x[5]}}, x }
+	//partial_product = partial_product + {{32{temp[31]}}, temp};
+		$display("The value of PP is %b", partial_product);
+
+	
+	//partial_product = partial_product + {{32{multiplicand_reg[31]}}, multiplicand_reg} * two_bit_booth[j]; //{ {2{x[5]}}, x }
+	//$display("The value of partial_product is %b", partial_product);
+	
 	end
-	//$display("The value of partial_product is %d", partial_product);
-	//$display("The value of multiplicand is %d", multiplicand_reg);
-	//$display("The value of multiplier is %d", multiplier_reg);
+	$display("The value of partial_product is %d", partial_product);
+	$display("The value of multiplicand is %d", multiplicand_reg);
+	$display("The value of multiplier is %d", multiplier_reg);
  end
  assign resLo = partial_product[31:0];
  assign resHi = partial_product[63:32];
-
  endmodule
  

@@ -1,0 +1,35 @@
+module multiplication(multiplicand, multiplier, result);
+input [31:0] multiplicand, multiplier;
+output [61:0] result;
+
+  reg signed [31:0] multiplicand_reg, multiplier_reg
+  reg signed [61:0] result_reg;
+  integer i;
+  
+ /*
+ 
+ booth thinker
+ multiplicand
+ multiplier
+ 
+ put above into reg
+ make bit pair booth number from multiplier
+ enter loop to create final number
+ have a 64 bit num with 32 1's
+	shift this each loop and use to or with multiplied multiplicand
+ do partial products at eaech stage
+ 
+ var needed 
+ bit pair num
+ 64 bit of 1's (might need zeros too)
+ parrtial product var (64 bits)
+ might also need a placeholder for multi
+ */
+ 
+ always @(*) begin
+ 
+ 
+ 
+ end
+ endmodule
+ 

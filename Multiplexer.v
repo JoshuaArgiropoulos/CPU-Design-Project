@@ -79,14 +79,14 @@ always @(*) begin
 	5'b11000 : BusMuxOut <= BusMuxInR13;
 	5'b01101 : BusMuxOut <= BusMuxInR14;
 	5'b10101 : BusMuxOut <= BusMuxInR15;
-	5'b10110 : BusMuxOut <= BusMuxInHI;
-	5'b01110 : BusMuxOut <= BusMuxInLO;
-	5'b11010 : BusMuxOut <= BusMuxInZHI;
-	5'b11100 : BusMuxOut <= BusMuxInZLO;
-	5'b10111 : BusMuxOut <= BusMuxInPc;
-	5'b11001 : BusMuxOut <= BusMuxInMDR;
-	5'b11011 : BusMuxOut <= BusMuxInInPort;
-	5'b11101 : BusMuxOut <= CSignExtended;
+	5'b10110 : BusMuxOut <= BusMuxInHI;//16
+	5'b01110 : BusMuxOut <= BusMuxInLO;//17
+	5'b11010 : BusMuxOut <= BusMuxInZHI;//18
+	5'b11100 : BusMuxOut <= BusMuxInZLO;//19
+	5'b10111 : BusMuxOut <= BusMuxInPc;//20    
+	5'b11001 : BusMuxOut <= BusMuxInMDR;//21    19
+	5'b11011 : BusMuxOut <= BusMuxInInPort;//22
+	5'b11101 : BusMuxOut <= CSignExtended;//23
 	default : BusMuxOut <= 0;
 endcase
 end
