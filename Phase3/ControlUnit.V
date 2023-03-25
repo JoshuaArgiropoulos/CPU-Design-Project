@@ -181,6 +181,68 @@ parameter Reset_state= 8'b00000000, fetch0 = 8'b00000001, fetch1 = 8'b00000010, 
 					 //Yin <= 0;
 
 				 end
+				 LD3: begin
+								
+					 //#10 busSelect[2] <= 1; enable[19] <= 1;
+								
+					 //#15 busSelect[2] <= 0; enable[19] <= 0;
+								
+					 #10 Grb <= 1; BAout <= 1; enable[19] <= 1;
+								
+					 #15 Grb <= 0; BAout <= 0; enable[19] <= 0;
+		
+				 end
+		
+				 LD4: begin
+				
+					 //#15 busSelect[2] <= 0; 	
+			
+					 //#15 enable[19] <= 0;
+					#10 busSelect[23] <=1; Control_Signals <= 1; enable[18] <= 1;
+					 #15 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+		
+				 end
+		
+				 LD5: begin
+								
+					 //#10 enable[19] <= 1; 
+					
+					 //#15  enable[19] <= 0;
+					
+					 #10 busSelect[19] <= 1; enable[25] <= 1;
+					
+					 #15 busSelect[19] <= 0; enable[25] <= 0;
+		
+				 end
+		
+				 LD6: begin
+
+					
+					 #10 MD_Read <= 1; ReadRAM <= 1; enable[21] <= 1;
+					
+					 
+				
+					 #15  ReadRAM <= 0;
+		
+				 end
+				 
+		
+				 LD7: begin
+
+				
+					 #10 MD_Read <= 0; enable[21] <= 0; 
+					
+					 busSelect[21] <= 1; Gra <= 1; Rin <= 1;
+								
+					
+					 #15 Rin <= 0;
+					
+					 #15 busSelect[21]<= 0; Gra <= 0;
+				 
+				 
+				 halt3: begin
+					 Run <= 0;
+				 end
 ⁞
 
 			 endcase
