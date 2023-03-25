@@ -15,7 +15,8 @@ reg [3:0] Present_state = Default;
 
 	 
 
-datapath DUT(clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, enable, busSelect, inPort, Control_Signals, busMuxOut, OutputUnit, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, mdr, zhi, zlo, pc, ir, CONFFOut);//, hi, lo, temp); 
+datapath DUT(clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, enable, busSelect, inPort, Control_Signals, busMuxOut, 
+OutputUnit, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, mdr, zhi, zlo, pc, ir, CONFFOut);//, hi, lo, temp); 
 
 
 
@@ -34,10 +35,8 @@ always @(posedge clk) begin
 		T0 :#30 Present_state = T1;
 		T1 :#30 Present_state = T2;
 		T2 :#30 Present_state = T3;
-		T3 :#30 Present_state = T4;
-		T4 :#30 Present_state = T5;
-		T5 :#30 Present_state = T6;
-		T6 :#30 Present_state = T7;
+		//T3 :#30 Present_state = T4;//enable for jal
+		//T4 :#30 Present_state = T5;//enable for jal
 	endcase
 end
 
@@ -67,12 +66,12 @@ always @(Present_state) begin
 		Reg_load1a: begin
 							 
 								#0  enable[20] <= 1; busSelect[22] <= 1;//put initial PC value for correct ram
-								//inPort <= 32'd13; //jr
-								inPort <= 32'd14; //jal
+								inPort <= 32'd13; //jr
+								//inPort <= 32'd14; //jal goto ln 38 and enable other sections
 								#40 enable[20] <= 0; busSelect[22] <= 0; 
 								
 		end
-		Reg_load1b: begin//must comment out for ld1
+		Reg_load1b: begin
 								#0; inPort <= 32'd5; busSelect[22] <= 1; enable[2] <= 1;//preload regs
 								#40; busSelect[22] <= 0; enable[2] <= 0;
 		end

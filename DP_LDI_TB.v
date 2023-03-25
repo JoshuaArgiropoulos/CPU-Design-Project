@@ -7,15 +7,14 @@ reg [4:0] Control_Signals;
 wire [31:0] busMuxOut, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, mdr, zhi, zlo, pc, ir;//, hi, lo, temp;
 wire CONFFOut;
 
-parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, /*Reg_load2a = 4'b0011, 
-			 Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, T0 = 4'b0111, 
-			 T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100, T6 = 4'b1101, T7 = 4'b1110;*/
-			 T0 = 4'b0011, T1 = 4'b0100, T2 = 4'b0101, T3 = 4'b0110, T4 = 4'b0111, T5 = 4'b1000;//, T6 = 4'b1001, T7 = 4'b1010;
+parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010,
+			 T0 = 4'b0011, T1 = 4'b0100, T2 = 4'b0101, T3 = 4'b0110, T4 = 4'b0111, T5 = 4'b1000;
 reg [3:0] Present_state = Default;
 
 	 
 
-datapath DUT(clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, enable, busSelect, inPort, Control_Signals, busMuxOut, OutputUnit, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, mdr, zhi, zlo, pc, ir, CONFFOut);//, hi, lo, temp); 
+datapath DUT(clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, enable, busSelect, inPort, Control_Signals, busMuxOut, 
+OutputUnit, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, mdr, zhi, zlo, pc, ir, CONFFOut);//, hi, lo, temp); 
 
 
 
@@ -65,14 +64,14 @@ always @(Present_state) begin
 		Reg_load1a: begin
 							 
 								#0  enable[20] <= 1; busSelect[22] <= 1;//put initial PC value for correct ram
-								inPort <= 32'd2; //ldI1
-								//inPort <= 32'd3; //ldI2
+								//inPort <= 32'd2; //ldI1
+								inPort <= 32'd3; //ldI2
 								#40 enable[20] <= 0; busSelect[22] <= 0; 
 								
 		end
 		Reg_load1b: begin//must comment out for ldI1
-								#0; //inPort <= 32'd5; busSelect[22] <= 1; enable[1] <= 1;//preload regs
-								#40; //busSelect[22] <= 0; enable[1] <= 0;
+								#0; inPort <= 32'd5; busSelect[22] <= 1; enable[1] <= 1;//preload regs
+								#40; busSelect[22] <= 0; enable[1] <= 0;
 		end
 		T0: begin
 								#0 busSelect[20] <= 1;//PC
@@ -103,8 +102,8 @@ always @(Present_state) begin
 
 		end
 		T3: begin
-								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg
-								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
+								#0 Grb <= 1; BAout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg
+								#40 Grb <= 0; BAout <= 0; enable[19] <= 0;
 		end
 		T4: begin
 								#0 busSelect[23] <=1; Control_Signals <= 1; enable[18] <= 1;//adds preload reg with immidiate value, stores in Zlow

@@ -7,15 +7,14 @@ reg [4:0] Control_Signals;
 wire [31:0] busMuxOut, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, mdr, zhi, zlo, pc, ir;//, hi, lo, temp;
 wire CONFFOut;
 
-parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, /*Reg_load2a = 4'b0011, 
-			 Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, T0 = 4'b0111, 
-			 T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100, T6 = 4'b1101, T7 = 4'b1110;*/
+parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010,
 			 T0 = 4'b0011, T1 = 4'b0100, T2 = 4'b0101, T3 = 4'b0110, T4 = 4'b0111, T5 = 4'b1000, T6 = 4'b1001, T7 = 4'b1010;
 reg [3:0] Present_state = Default;
 
 	 
 
-datapath DUT(clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, enable, busSelect, inPort, Control_Signals, busMuxOut, OutputUnit, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, mdr, zhi, zlo, pc, ir, CONFFOut);//, hi, lo, temp); 
+datapath DUT(clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, enable, busSelect, inPort, Control_Signals, busMuxOut, 
+OutputUnit, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, mdr, zhi, zlo, pc, ir, CONFFOut);//, hi, lo, temp); 
 
 
 
@@ -34,10 +33,6 @@ always @(posedge clk) begin
 		T0 :#30 Present_state = T1;
 		T1 :#30 Present_state = T2;
 		T2 :#30 Present_state = T3;
-		T3 :#30 Present_state = T4;
-		T4 :#30 Present_state = T5;
-		T5 :#30 Present_state = T6;
-		T6 :#30 Present_state = T7;
 	endcase
 end
 
@@ -67,15 +62,15 @@ always @(Present_state) begin
 		Reg_load1a: begin
 							 
 								#0  enable[20] <= 1; busSelect[22] <= 1;//put initial PC value for correct ram
-								inPort <= 32'd15; //mfhi
-								//inPort <= 32'd16; //mflo
+								//inPort <= 32'd15; //mfhi
+								inPort <= 32'd16; //mflo
 								#40 enable[20] <= 0; busSelect[22] <= 0; 
 								
 		end
 		Reg_load1b: begin//must comment out for ld1
 								#0; inPort <= 32'd5; busSelect[22] <= 1; //preload regs
 								enable[16] <= 1;//HI
-								//enable[17] <= 1;//LO
+								enable[17] <= 1;//LO
 								#40; busSelect[22] <= 0; 
 								enable[16] <= 0;//HI
 								//enable[17] <= 0;//LO

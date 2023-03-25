@@ -84,7 +84,7 @@ always @(*) begin
 	5'b11010 : BusMuxOut <= BusMuxInZHI;//18
 	5'b11100 : BusMuxOut <= BusMuxInZLO;//19
 	5'b10111 : BusMuxOut <= BusMuxInPc;//20    
-	5'b11001 : BusMuxOut <= BusMuxInMDR;//21    19
+	5'b11001 : BusMuxOut <= BusMuxInMDR;//21    
 	5'b11011 : BusMuxOut <= BusMuxInInPort;//22
 	5'b11101 : BusMuxOut <= CSignExtended;//23
 	default : BusMuxOut <= 0;
