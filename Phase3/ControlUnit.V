@@ -239,7 +239,32 @@ parameter Reset_state= 8'b00000000, fetch0 = 8'b00000001, fetch1 = 8'b00000010, 
 					
 					 #15 busSelect[21]<= 0; Gra <= 0;
 				 end
+				 
+				 
+				 LDI3: begin
+				
+					 #0 Grb <= 1; BAout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg
+					
+					 #40 Grb <= 0; BAout <= 0; enable[19] <= 0;
+		
+				 end
+		
+				 LDI4: begin
+					 #0 busSelect[23] <=1; Control_Signals <= 1; enable[18] <= 1;//adds preload reg with immidiate value, stores in Zlow
+					
+					 #40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+		
+				 end
+		
+				 LDI5: begin
+				
+					 #0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
+					
+					 #40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+			
+				 end
 					 
+				
 				 BR3: begin
 							
 					 #0 Gra <= 1; Rout <= 1; enable[27] <= 1;//Puts preloaded reg into CONFF
@@ -278,7 +303,32 @@ parameter Reset_state= 8'b00000000, fetch0 = 8'b00000001, fetch1 = 8'b00000010, 
 					 end
 						
 					 #40 busSelect[19] <= 0; enable[20] <= 0;
-				end			 
+				
+				 end	
+				
+				 JR3: begin
+					
+					 #0 ;busSelect[20] <= 1; Control_Signals <= 14; enable[18] <= 1;
+					
+					 #40 ;busSelect[20] <= 0; Control_Signals <= 0; enable[18] <= 0;
+		
+				 end
+		
+				 JR4: begin
+				
+					 #0 ;busSelect[19] <= 1; enable[15] <= 1;
+					
+					 #40 ;busSelect[19] <= 0; enable[15] <= 0;
+		
+				 end
+		
+				 JR5: begin
+					
+					 #0 Gra <= 1; Rout <= 1; enable[20] <= 1;//put Zlow into MAR
+				
+					 #40 Gra <= 0; Rout <= 0; enable[20] <= 0;
+		
+				 end
 				 
 				 
 					 halt3: begin
