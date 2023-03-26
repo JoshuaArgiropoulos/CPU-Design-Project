@@ -32,7 +32,7 @@ parameter Reset_state= 9'b000000000, fetch0 = 9'b000000001, fetch1 = 9'b00000001
 			 andi3 = 9'b000111010, andi4 = 9'b000111011, andi5 = 9'b000111100, ori3 = 9'b000111101, ori4 = 9'b000111110, ori5 = 9'000111111,
 			 br3 = 9'b001000000, br4 = 9'b001000001, br5 = 9'b001000010, br6 = 9'b001000011, br7 = 9'b011111111, jr3 = 9'b001000100, jal3 = 9'b001000101, 
 			 jal4 = 9'b001000110, jal5 = 9'b000110110, mfhi3 = 9'b001000111, mflo3 = 9'b001001000, in3 = 9'b001001001, out3 = 9'b001001010, nop3 = 9'b001001011, 
-			 halt3 = 9'b001001100; shra3 = 9'b100000000, shra4 = 9'b100000000, shra4 = 9'b100000000,
+			 halt3 = 9'b001001100, shra3 = 9'b100000000, shra4 = 9'b100000000, shra5 = 9'b100000000;
 	
 
 	reg		[8:0] Present_state = Reset_state;
@@ -75,6 +75,7 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 											5'b10110		:		Present_state=out3;
 											5'b11001		:		Present_state=nop3;
 											5'b11010		:		Present_state=halt3;
+											5'b11111                :               Present_state=shra3;
 										endcase
 									end
 			
@@ -275,174 +276,391 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 		end 
 				 
 
-				 add3: begin
-
-					 Grb <= 1; Rout <= 1;
-
-					 //Y IN
-					 enable[19] <= 0;
-					 //Yin <= 0;
-
-				 end
-				 LD3: begin
-								
-					 //#10 busSelect[2] <= 1; enable[19] <= 1;
-								
-					 //#15 busSelect[2] <= 0; enable[19] <= 0;
-								
-					 #10 Grb <= 1; BAout <= 1; enable[19] <= 1;
-								
-					 #15 Grb <= 0; BAout <= 0; enable[19] <= 0;
-		
-				 end
-		
-				 LD4: begin
-				
-					 //#15 busSelect[2] <= 0; 	
-			
-					 //#15 enable[19] <= 0;
-					#10 busSelect[23] <=1; Control_Signals <= 1; enable[18] <= 1;
-					 #15 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
-		
-				 end
-		
-				 LD5: begin
-								
-					 //#10 enable[19] <= 1; 
-					
-					 //#15  enable[19] <= 0;
-					
-					 #10 busSelect[19] <= 1; enable[25] <= 1;
-					
-					 #15 busSelect[19] <= 0; enable[25] <= 0;
-		
-				 end
-		
-				 LD6: begin
-
-					
-					 #10 MD_Read <= 1; ReadRAM <= 1; enable[21] <= 1;
-					
-					 
-				
-					 #15  ReadRAM <= 0;
-		
-				 end
 				 
-		
-				 LD7: begin
-
-				
-					 #10 MD_Read <= 0; enable[21] <= 0; 
-					
-					 busSelect[21] <= 1; Gra <= 1; Rin <= 1;
+				 ld3: begin
 								
-					
-					 #15 Rin <= 0;
-					
-					 #15 busSelect[21]<= 0; Gra <= 0;
-				 end
-				 
-				 
-				 LDI3: begin
-				
 					 #0 Grb <= 1; BAout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg
 					
 					 #40 Grb <= 0; BAout <= 0; enable[19] <= 0;
 		
 				 end
 		
-				 LDI4: begin
+				 ld4: begin
+							
 					 #0 busSelect[23] <=1; Control_Signals <= 1; enable[18] <= 1;//adds preload reg with immidiate value, stores in Zlow
-					
+								
 					 #40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
 		
 				 end
 		
-				 LDI5: begin
-				
-					 #0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
-					
-					 #40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+				 ld5: begin
+		
+					 #0 busSelect[19] <= 1; enable[25] <= 1;//put Zlow into MAR
+		
+					 #40 busSelect[19] <= 0; enable[25] <= 0;
+		
+				 end
+		
+				 ld6: begin
+					 #0 MD_Read <= 1; ReadRAM <= 1; enable[21] <= 1;//reads data from addr location and puts into MRD
 			
-				 end
-					 
-				
-				 BR3: begin
-							
-					 #0 Gra <= 1; Rout <= 1; enable[27] <= 1;//Puts preloaded reg into CONFF
-						
-					 #40 Gra <= 0; Rout <= 0; enable[27] <= 0;
-		
-				end	
-				 
-			
-					
-				 BR4: begin
-					
-					 #0 busSelect[20] <=1; enable[19] <= 1;//PCout Yin
-						
-					
-					 #40 busSelect[20] <=0; enable[19] <= 0;
-		
-					
-				 end
-		
-				 BR5: begin
-					
-					 #0 busSelect[23] <=1; Control_Signals <= 15; enable[18] <= 1;//adds CSE with PC??, stores in Zlow
-						
-					 #40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+					 #40  MD_Read <= 0; ReadRAM <= 0; enable[21] <= 0;
 		
 				 end
-		
-				 BR6: begin
 	
-					
-					 if(CONFFOut)begin						
-						 #0 busSelect[19] <= 1; enable[20] <= 1;//CSE -> PC
-							
-				
-					 end
-						
-					 #40 busSelect[19] <= 0; enable[20] <= 0;
-				
-				 end	
-				
-				 JR3: begin
-					
-					 #0 ;busSelect[20] <= 1; Control_Signals <= 14; enable[18] <= 1;
-					
-					 #40 ;busSelect[20] <= 0; Control_Signals <= 0; enable[18] <= 0;
-		
-				 end
-		
-				 JR4: begin
-				
-					 #0 ;busSelect[19] <= 1; enable[15] <= 1;
-					
-					 #40 ;busSelect[19] <= 0; enable[15] <= 0;
-		
-				 end
-		
-				 JR5: begin
-					
-					 #0 Gra <= 1; Rout <= 1; enable[20] <= 1;//put Zlow into MAR
-				
-					 #40 Gra <= 0; Rout <= 0; enable[20] <= 0;
-		
-				 end
-				 
-				 
-					 halt3: begin
-					 
-						 Run <= 0;
-				 
-					 end
-⁞
+				 ld7: begin
 
-			 endcase
+				
+					 #0 busSelect[21] <= 1; Gra <= 1; Rin <= 1;//enables destination reg and imputs desired value from MDR
+					
+					 #40 busSelect[21] <= 0; Gra <= 0; Rin <= 0;
+		
+				 end
+		
+//ldi
+		ldi3: begin
+								#0 Grb <= 1; BAout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg
+								#40 Grb <= 0; BAout <= 0; enable[19] <= 0;
+		end
+		ldi4: begin
+								#0 busSelect[23] <=1; Control_Signals <= 1; enable[18] <= 1;//adds preload reg with immidiate value, stores in Zlow
+								#40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		ldi5: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+			end
+			
+//st
+		st3: begin
+								#0 Grb <= 1; BAout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg
+								#40 Grb <= 0; BAout <= 0; enable[19] <= 0;
+		end
+		st4: begin
+								#0 busSelect[23] <=1; Control_Signals <= 1; enable[18] <= 1;//adds preload reg with immidiate value, stores in Zlow
+								#40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		st5: begin
+								#0 busSelect[19] <= 1; enable[25] <= 1;//put Zlow into MAR
+								#40 busSelect[19] <= 0; enable[25] <= 0;
+		end
+		st6: begin
+								#0 Gra <= 1; BAout <= 1; Rout <= 1; WriteRAM <= 1; 
+								#40 Gra <= 0; BAout <= 0; Rout <= 0; WriteRAM <= 0;
+		end
 
-		 end
+
+//three param ALU
+//add
+		add3: begin
+								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
+								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
+		end
+		add4: begin
+								#0 Grc <= 1; Rout <= 1; Control_Signals <= 1; enable[19] <= 1;
+								#40 Grc <= 1; Rout <= 0; Control_Signals <= 0; enable[19] <= 0;
+		end
+		add5: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+		end
+		
+//sub
+		sub3: begin
+								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
+								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
+		end
+		sub4: begin
+								#0 Grc <= 1; Rout <= 1; Control_Signals <= 2; enable[19] <= 1;
+								#40 Grc <= 1; Rout <= 0; Control_Signals <= 0; enable[19] <= 0;
+		end
+		sub5: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+		end
+
+//and
+		and3: begin
+								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
+								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
+		end
+		and4: begin
+								#0 Grc <= 1; Rout <= 1; Control_Signals <= 3; enable[19] <= 1;
+								#40 Grc <= 1; Rout <= 0; Control_Signals <= 0; enable[19] <= 0;
+		end
+		and5: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+		end
+		
+//or
+		or3: begin
+								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
+								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
+		end
+		or4: begin
+								#0 Grc <= 1; Rout <= 1; Control_Signals <= 4; enable[19] <= 1;
+								#40 Grc <= 1; Rout <= 0; Control_Signals <= 0; enable[19] <= 0;
+		end
+		or5: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+		end
+		
+//shr
+		shr3: begin
+								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
+								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
+		end
+		shr4: begin
+								#0 Grc <= 1; Rout <= 1; Control_Signals <= 7; enable[19] <= 1;
+								#40 Grc <= 1; Rout <= 0; Control_Signals <= 0; enable[19] <= 0;
+		end
+		shr5: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+		end
+		
+//shra
+		shra3: begin
+								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
+								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
+		end
+		shra4: begin
+								#0 Grc <= 1; Rout <= 1; Control_Signals <= 13; enable[19] <= 1;
+								#40 Grc <= 1; Rout <= 0; Control_Signals <= 0; enable[19] <= 0;
+		end
+		shra5: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+		end
+		
+//shl
+		shl3: begin
+								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
+								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
+		end
+		shl4: begin
+								#0 Grc <= 1; Rout <= 1; Control_Signals <= 8; enable[19] <= 1;
+								#40 Grc <= 1; Rout <= 0; Control_Signals <= 0; enable[19] <= 0;
+		end
+		shl5: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+		end
+		
+//ror
+		ror3: begin
+								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
+								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
+		end
+		ror4: begin
+								#0 Grc <= 1; Rout <= 1; Control_Signals <= 9; enable[19] <= 1;
+								#40 Grc <= 1; Rout <= 0; Control_Signals <= 0; enable[19] <= 0;
+		end
+		ror5: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+		end
+		
+//rol
+		rol3: begin
+								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
+								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
+		end
+		rol4: begin
+								#0 Grc <= 1; Rout <= 1; Control_Signals <= 10; enable[19] <= 1;
+								#40 Grc <= 1; Rout <= 0; Control_Signals <= 0; enable[19] <= 0;
+		end
+		rol5: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+		end
+		
+//addi
+		addi3: begin
+								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
+								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
+		end
+		addi4: begin
+								#0 busSelect[23] <=1; Control_Signals <= 1; enable[18] <= 1;//addi
+								#40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		addi5: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+		end
+		
+//andi
+		andi3: begin
+								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
+								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
+		end
+		andi4: begin
+								#0 busSelect[23] <=1; Control_Signals <= 3; enable[18] <= 1;//andi
+								#40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		andi5: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+		end
+		
+//ori
+		ori3: begin
+								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
+								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
+		end
+		ori4: begin
+								#0 busSelect[23] <=1; Control_Signals <= 4; enable[18] <= 1;//ori
+								#40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		ori5: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+		end
+		
+		
+//Two Param ALU
+//mul
+		mul3: begin
+								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
+								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
+		end
+		mul4: begin
+								#0 busSelect[23] <=1; Control_Signals <= 12; enable[18] <= 1;//mul
+								#40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		mul5: begin
+								#0 busSelect[19] <= 1; enable[17] <= 1;//put Zlow into LO
+								#40 busSelect[19] <= 0; enable[17] <= 0;
+		end
+		mul6: begin
+								#0 busSelect[19] <= 1; enable[18] <= 1;//put Zlow into HI
+								#40 busSelect[19] <= 0; enable[18] <= 0;
+		end
+		
+//div
+		div3: begin
+								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
+								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
+		end
+		div4: begin
+								#0 busSelect[23] <=1; Control_Signals <= 11; enable[18] <= 1;
+								#40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		div5: begin
+								#0 busSelect[19] <= 1; enable[17] <= 1;//put Zlow into LO
+								#40 busSelect[19] <= 0; enable[17] <= 0;
+		end
+		div6: begin
+								#0 busSelect[19] <= 1; enable[18] <= 1;//put Zlow into HI
+								#40 busSelect[19] <= 0; enable[18] <= 0;
+		end
+		
+//neg
+		neg3: begin
+								#0 Grb <= 1; Rout <= 1; Control_Signals <= 5; enable[18] <= 1;
+								#40 Grb <= 0; Rout <= 0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		neg4: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into LO
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+		end
+//NOT
+		not3: begin
+								#0 Grb <= 1; Rout <= 1; Control_Signals <= 6; enable[18] <= 1;
+								#40 Grb <= 0; Rout <= 0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		not4: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into LO
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+								
+//Branch
+		br3: begin
+								#0 Gra <= 1; Rout <= 1; enable[27] <= 1;//Puts preloaded reg into CONFF
+								#40 Gra <= 0; Rout <= 0; enable[27] <= 0;
+		end
+		br4: begin
+								#0 busSelect[20] <=1; enable[19] <= 1;//PCout Yin
+								#40 busSelect[20] <=0; enable[19] <= 0;
+		end
+		br5: begin
+								#0 busSelect[23] <=1; Control_Signals <= 15; enable[18] <= 1;//adds CSE with PC??, stores in Zlow
+								#40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		br6: begin
+	
+								if(CONFFOut)begin
+								#0 busSelect[19] <= 1; enable[20] <= 1;//CSE -> PC
+								end
+								#40 busSelect[19] <= 0; enable[20] <= 0;
+		end
+		
+//jump
+//jr
+		jr3: begin
+								#0 busSelect[20] <= 1; Control_Signals <= 14; enable[18] <= 1;
+								#40 busSelect[20] <= 0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		
+//jal
+		jal3: begin
+								#0 busSelect[20] <= 1; Control_Signals <= 14; enable[18] <= 1;
+								#40 busSelect[20] <= 0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		jal4: begin
+								#0 busSelect[19] <= 1; enable[15] <= 1;
+								#40 busSelect[19] <= 0; enable[15] <= 0;
+		end
+		jal5: begin
+								#0 Gra <= 1; Rout <= 1; enable[20] <= 1;//put Zlow into MAR
+								#40 Gra <= 0; Rout <= 0; enable[20] <= 0;
+		end
+		
+//Special
+		
+//mfhi
+		mfhi3: begin
+								#0 Gra <= 1; Rin <= 1; busSelect[16] <= 1;
+								#40 Gra <= 0; Rin <= 0; busSelect[16] <= 0;//HI
+		
+		end
+		
+//mflo
+		mflo3: begin
+								#0 Gra <= 1; Rin <= 1; busSelect[17] <= 1;
+								#40 Gra <= 0; Rin <= 0; busSelect[17] <= 0;//LO
+		
+		end
+		
+//Control Sequence
+//in
+		in3: begin
+								#0 Gra <= 1; busSelect[22] <= 1; Rin <= 1; //In
+								#40 Gra <= 0; busSelect[22] <= 1; Rin <= 0; //In
+		end
+		
+//out
+		out3: begin
+								#0 Gra <= 1; enable[28] <= 1;  <= 1; //Out
+								#40 Gra <= 0; enable[28] <= 0;  <= 0; //Out
+		end
+		
+//nop
+		nop3: begin
+								#0;
+								#40;
+		end
+//halt
+		halt3: begin
+								#0 run <= 0;
+								#40;
+		end
+
+			
+			endcase
+
+		 
+		end
 
 	 endmodule 
