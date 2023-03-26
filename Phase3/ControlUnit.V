@@ -94,7 +94,7 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 			mul3				: 	Present_state = mul4;
 			mul4				: 	Present_state = mul5;
 			mul5				: 	Present_state = mul6;
-			mul6           :	Present_state = fetch0; 
+			mul6                            :	Present_state = fetch0; 
 			
 			div3				: 	Present_state = div4;
 			div4				: 	Present_state = div5;
@@ -107,7 +107,7 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 			
 			and3				: 	Present_state = and4;
 			and4				: 	Present_state = and5;
-			and5   			:	Present_state = fetch0;
+			and5   			        :	Present_state = fetch0;
 			
 			shl3				: 	Present_state = shl4;
 			shl4				: 	Present_state = shl5;
@@ -139,7 +139,7 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 			ld4				: 	Present_state = ld5;
 			ld5				: 	Present_state = ld6;
 			ld6				: 	Present_state = ld7;
-			ld7				:  Present_state = fetch0;
+			ld7				:       Present_state = fetch0;
 			
 			ldi3				: 	Present_state = ldi4;
 			ldi4				: 	Present_state = ldi5;
@@ -152,7 +152,7 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 			
 			andi3				: 	Present_state = andi4;
 			andi4				: 	Present_state = andi5;
-			andi5 			:	Present_state = fetch0;
+			andi5 			        :	Present_state = fetch0;
 			
 			ori3				: 	Present_state = ori4;
 			ori4				: 	Present_state = ori5;
@@ -173,9 +173,9 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 			
 			in3 				:	Present_state = fetch0;
 			
-			mflo3 			:	Present_state = fetch0;
+			mflo3 			        :	Present_state = fetch0;
 			
-			mfhi3 			:	Present_state = fetch0;
+			mfhi3 			        :	Present_state = fetch0;
 			
 			nop3 				:	Present_state = fetch0;
 			
