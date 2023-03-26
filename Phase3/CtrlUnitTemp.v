@@ -213,15 +213,15 @@
 		end
 		
 //ori
-		addi3: begin
+		ori3: begin
 								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
 								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
 		end
-		addi4: begin
+		ori4: begin
 								#0 busSelect[23] <=1; Control_Signals <= 4; enable[18] <= 1;//ori
 								#40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
 		end
-		addi5: begin
+		ori5: begin
 								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
 								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
 		end
@@ -247,19 +247,19 @@
 		end
 		
 //div
-		mul3: begin
+		div3: begin
 								#0 Grb <= 1; Rout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg //change BAout to Rout
 								#40 Grb <= 0; Rout <= 0; enable[19] <= 0;
 		end
-		mul4: begin
+		div4: begin
 								#0 busSelect[23] <=1; Control_Signals <= 11; enable[18] <= 1;
 								#40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
 		end
-		mul5: begin
+		div5: begin
 								#0 busSelect[19] <= 1; enable[17] <= 1;//put Zlow into LO
 								#40 busSelect[19] <= 0; enable[17] <= 0;
 		end
-		mul6: begin
+		div6: begin
 								#0 busSelect[19] <= 1; enable[18] <= 1;//put Zlow into HI
 								#40 busSelect[19] <= 0; enable[18] <= 0;
 		end
@@ -270,6 +270,15 @@
 								#40 Grb <= 0; Rout <= 0; Control_Signals <= 0; enable[18] <= 0;
 		end
 		neg4: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into LO
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+		end
+//NOT
+		not3: begin
+								#0 Grb <= 1; Rout <= 1; Control_Signals <= 6; enable[18] <= 1;
+								#40 Grb <= 0; Rout <= 0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		not4: begin
 								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into LO
 								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
 								
