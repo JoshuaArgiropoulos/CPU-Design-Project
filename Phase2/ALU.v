@@ -5,11 +5,12 @@ input [4:0] select;
 output reg [63:0] result;
 reg [31:0] IncPc = 1;
 
-wire [31:0] addOut, subOut, andOut, orOut, negOut, notOut, shrOut, shlOut, rorOut, rolOut, addIOut, andIOut, orIOut, IncPcAddOut;
+wire [31:0] addOut, subOut, andOut, orOut, negOut, notOut, shrOut, shlOut, rorOut, rolOut, addIOut, andIOut, orIOut, IncPcAddOut, CONFFPcAddOut;
 wire [63:0] divOut, mulOut;
 
 add aluAdd (value1, value2, addOut);
 add PcIncAdd (IncPc, value2, IncPcAddOut);
+add CONFFPcIncAdd (value1, value2 + 1, CONFFPcAddOut);
 sub aluSub (value1, value2, subOut);
 andOp aluAnd (value1, value2, andOut);
 orOp aluOr (value1, value2, orOut);
@@ -82,6 +83,10 @@ always @(*) begin
 				end
 		4'd14:begin//IncPc
 					result[31:0] <= IncPcAddOut;
+					result[63:32] <= 32'b0;
+				end
+		4'd15:begin//IncPcCONFF
+					result[31:0] <= CONFFPcAddOut;
 					result[63:32] <= 32'b0;
 				end
 		default result[63:0] <= 64'b0;
