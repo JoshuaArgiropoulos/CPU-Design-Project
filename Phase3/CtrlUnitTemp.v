@@ -1,5 +1,62 @@
 //code for control unit
 
+//Memory Access
+//ld
+		ld3: begin
+								#0 Grb <= 1; BAout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg
+								#40 Grb <= 0; BAout <= 0; enable[19] <= 0;
+		end
+		ld4: begin
+								#0 busSelect[23] <=1; Control_Signals <= 1; enable[18] <= 1;//adds preload reg with immidiate value, stores in Zlow
+								#40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		ld5: begin
+								#0 busSelect[19] <= 1; enable[25] <= 1;//put Zlow into MAR
+								#40 busSelect[19] <= 0; enable[25] <= 0;
+		end
+		ld6: begin
+								#0 MD_Read <= 1; ReadRAM <= 1; enable[21] <= 1;//reads data from addr location and puts into MRD
+								#40  MD_Read <= 0; ReadRAM <= 0; enable[21] <= 0;
+		end
+		ld7: begin
+
+								#0 busSelect[21] <= 1; Gra <= 1; Rin <= 1;//enables destination reg and imputs desired value from MDR
+								#40 busSelect[21] <= 0; Gra <= 0; Rin <= 0;
+		end
+		
+//ldi
+		ldi3: begin
+								#0 Grb <= 1; BAout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg
+								#40 Grb <= 0; BAout <= 0; enable[19] <= 0;
+		end
+		ldi4: begin
+								#0 busSelect[23] <=1; Control_Signals <= 1; enable[18] <= 1;//adds preload reg with immidiate value, stores in Zlow
+								#40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		ldi5: begin
+								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into dest reg
+								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+			end
+			
+//st
+		st3: begin
+								#0 Grb <= 1; BAout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg
+								#40 Grb <= 0; BAout <= 0; enable[19] <= 0;
+		end
+		st4: begin
+								#0 busSelect[23] <=1; Control_Signals <= 1; enable[18] <= 1;//adds preload reg with immidiate value, stores in Zlow
+								#40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		st5: begin
+								#0 busSelect[19] <= 1; enable[25] <= 1;//put Zlow into MAR
+								#40 busSelect[19] <= 0; enable[25] <= 0;
+		end
+		st6: begin
+								#0 Gra <= 1; BAout <= 1; Rout <= 1; WriteRAM <= 1; 
+								#40 Gra <= 0; BAout <= 0; Rout <= 0; WriteRAM <= 0;
+		end
+
+
 //three param ALU
 //add
 		add3: begin
@@ -215,3 +272,85 @@
 		neg4: begin
 								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into LO
 								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
+								
+//Branch
+		br3: begin
+								#0 Gra <= 1; Rout <= 1; enable[27] <= 1;//Puts preloaded reg into CONFF
+								#40 Gra <= 0; Rout <= 0; enable[27] <= 0;
+		end
+		br4: begin
+								#0 busSelect[20] <=1; enable[19] <= 1;//PCout Yin
+								#40 busSelect[20] <=0; enable[19] <= 0;
+		end
+		br5: begin
+								#0 busSelect[23] <=1; Control_Signals <= 15; enable[18] <= 1;//adds CSE with PC??, stores in Zlow
+								#40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		br6: begin
+	
+								if(CONFFOut)begin
+								#0 busSelect[19] <= 1; enable[20] <= 1;//CSE -> PC
+								end
+								#40 busSelect[19] <= 0; enable[20] <= 0;
+		end
+		
+//jump
+//jr
+		jr3: begin
+								#0 busSelect[20] <= 1; Control_Signals <= 14; enable[18] <= 1;
+								#40 busSelect[20] <= 0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		
+//jal
+		jal3: begin
+								#0 busSelect[20] <= 1; Control_Signals <= 14; enable[18] <= 1;
+								#40 busSelect[20] <= 0; Control_Signals <= 0; enable[18] <= 0;
+		end
+		jal4: begin
+								#0 busSelect[19] <= 1; enable[15] <= 1;
+								#40 busSelect[19] <= 0; enable[15] <= 0;
+		end
+		jal5: begin
+								#0 Gra <= 1; Rout <= 1; enable[20] <= 1;//put Zlow into MAR
+								#40 Gra <= 0; Rout <= 0; enable[20] <= 0;
+		end
+		
+//Special
+		
+//mfhi
+		mfhi3: begin
+								#0 Gra <= 1; Rin <= 1; busSelect[16] <= 1;
+								#40 Gra <= 0; Rin <= 0; busSelect[16] <= 0;//HI
+		
+		end
+		
+//mflo
+		mflo3: begin
+								#0 Gra <= 1; Rin <= 1; busSelect[17] <= 1;
+								#40 Gra <= 0; Rin <= 0; busSelect[17] <= 0;//LO
+		
+		end
+		
+//Control Sequence
+//in
+		in3: begin
+								#0 Gra <= 1; busSelect[22] <= 1; Rin <= 1; //In
+								#40 Gra <= 0; busSelect[22] <= 1; Rin <= 0; //In
+		end
+		
+//out
+		out3: begin
+								#0 Gra <= 1; enable[28] <= 1;  <= 1; //Out
+								#40 Gra <= 0; enable[28] <= 0;  <= 0; //Out
+		end
+		
+//nop
+		in3: begin
+								#0;
+								#40;
+		end
+//halt
+		in3: begin
+								#0; // run=0 //idk what to do here
+								#40;
+		end
