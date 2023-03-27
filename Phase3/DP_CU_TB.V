@@ -9,10 +9,10 @@ module DP_CU_TB;
  
  wire [31:0] ir, 
 	
- wire CONFFOut, clk, Reset, Stop
+ wire CONFFOut, clk, clr, Stop
 
 	datapath DUT(MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, enable, busSelect, 
-		     InPortData, Control_Signals, ir, CONFFOut, clk, Reset, Stop);
+		     InPortData, Control_Signals, ir, CONFFOut, clk, clr, Stop);
   
 );
 
