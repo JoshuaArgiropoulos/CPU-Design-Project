@@ -1,14 +1,19 @@
 module datapath (
-	 input clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM,
+	 //input clk, clr, MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM,
 	//For CU
-	Stop,
-	
-	 input [31:0] enable, busSelect, InPortData,
-    input [4:0] Control_Signals,
+	input clk, clr, Stop,
+	input [31:0] InPortData,
+	 //input [31:0] enable, busSelect, InPortData,
+    //input [4:0] Control_Signals,
     output [31:0] TrueBusMuxOut, OutputUnit, 
 	 output wire [31:0] r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, mdr, zhi, zlo, pc, ir,
 	 output wire CONFFOut
 );
+
+	//For CU
+	wire MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM;
+	wire [31:0] enable, busSelect;
+	wire [4:0] Control_Signals;
 	 //connect registers output to bus mux
 	 wire [31:0] BusMuxIn_R0;
 	 wire [31:0] BusMuxIn_R1;
@@ -45,7 +50,7 @@ module datapath (
     wire [31:0] BusMuxOut;
 	 
 	 wire [31:0] RAMOut;
-	 wire [31:0] AddressSignalRAM;
+	 wire [8:0] AddressSignalRAM;
 	 
 	 wire [31:0] IROut;
 	 wire [15:0] regsIn;
@@ -121,6 +126,6 @@ module datapath (
 	 BusMuxIn_R14, BusMuxIn_R15, BusMuxIn_HI, BusMuxIn_LO, BusMuxIn_ZHI,
 	 BusMuxIn_ZLO, BusMuxIn_PC, BusMuxIn_MDR, BusMuxIn_INPORT, CSignExtended, BusMuxOut);
   
-  ControlUnit CU(MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, enable, busSelect, InPortData, Control_Signals, IROut, CONFFOut, clk, clr, Stop);
+  ControlUnit CU(MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, run, enable, busSelect, Control_Signals, IROut, InPortData, CONFFOut, clk, clr, Stop);
 	 
 endmodule
