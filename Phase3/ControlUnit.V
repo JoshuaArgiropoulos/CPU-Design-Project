@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module control_unit (
+module ControlUnit(
 
 	output reg MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM,
   
