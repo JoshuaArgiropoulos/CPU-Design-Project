@@ -16,6 +16,7 @@ module ControlUnit(
 	
 	input wire CONFFOut, clk, Reset, Stop
 );
+	Control_Signals = ir[31:27];
 
   
 
@@ -51,35 +52,41 @@ always @(posedge clk, posedge Reset, posedge Stop)
 			fetch1			:	Present_state = fetch2;
 			fetch2			:	begin	
 			@(posedge clk);
-										case	(ir[31:27])
+										case	(Control_Signals)
 											5'b00011		:		Present_state=add3;	
 											5'b00100		: 		Present_state=sub3;
-											5'b01110		:		Present_state=mul3;
-											5'b01111		:		Present_state=div3;
-											5'b00101		:		Present_state=shr3;
-											5'b00110		:		Present_state=shl3;
-											5'b00111		:		Present_state=ror3;
-											5'b01000		:		Present_state=rol3;
-											5'b01001		:		Present_state=and3;
-											5'b01010		:		Present_state=or3;
-											5'b10000		:		Present_state=neg3;
-											5'b10001		:		Present_state=not3;
+											5'b00101            :               Present_state=and3;
+		 
+											5'b01111		:		Present_state=mul3;
+											5'b10000	:		Present_state=div3;
+											5'b00111		:		Present_state=shr3;
+											5'b01001		:		Present_state=shl3;
+											5'b01010	:		Present_state=ror3;
+											5'b01011		:		Present_state=rol3;
+											
+											
+											5'b00110	:		Present_state=or3;
+											5'b10001		:		Present_state=neg3;
+											5'b10010		:		Present_state=not3;
 											5'b00000		:		Present_state=ld3;
 											5'b00001		:		Present_state=ldi3;
 											5'b00010		:		Present_state=st3;
-											5'b01011		:		Present_state=addi3;
-											5'b01100		:		Present_state=andi3;
-											5'b01101		:		Present_state=ori3;
-											5'b10010		:		Present_state=br3;
-											5'b10011		:		Present_state=jr3;
-											5'b10100		:		Present_state=jal3;
-											5'b10111		:		Present_state=mfhi3;
-											5'b11000		:		Present_state=mflo3;
-											5'b10101		:		Present_state=in3;
-											5'b10110		:		Present_state=out3;
-											5'b11001		:		Present_state=nop3;
-											5'b11010		:		Present_state=halt3;
-											5'b11111    :     Present_state=shra3;
+											5'b01100		:		Present_state=addi3;
+											5'b01101		:		Present_state=andi3;
+											5'b01110		:		Present_state=ori3;
+											
+											5'b10011		:		Present_state=br3;
+							
+											
+											5'b10100		:		Present_state=jr3;
+											5'b10101		:		Present_state=jal3;
+											5'b11000		:		Present_state=mfhi3;
+											5'b11001		:		Present_state=mflo3;
+											5'b10110		:		Present_state=in3;
+											5'b10111		:		Present_state=out3;
+											5'b11010		:		Present_state=nop3;
+											5'b11011		:		Present_state=halt3;
+											5'b01000                :     Present_state=shra3;
 										endcase
 										
 										end
