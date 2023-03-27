@@ -127,6 +127,7 @@ module datapath (
 	 BusMuxIn_R14, BusMuxIn_R15, BusMuxIn_HI, BusMuxIn_LO, BusMuxIn_ZHI,
 	 BusMuxIn_ZLO, BusMuxIn_PC, BusMuxIn_MDR, BusMuxIn_INPORT, CSignExtended, BusMuxOut);
   
-  ControlUnit CU(MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, run, enable, busSelect, Control_Signals, IROut, InPortData, CONFFOut, clk, clr, Stop);
+  ControlUnit CU(MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, run, enable, busSelect,
+		 Control_Signals, IROut, InPortData, CONFFOut, clk, clr, Stop);
 	 
 endmodule
