@@ -2,19 +2,21 @@
 
 module ControlUnit(
 
-	output reg MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM,
+	output reg MD_Read, Gra, Grb, Grc, Rin, Rout, BAout, WriteRAM, ReadRAM, run,
   
-	output [31:0] enable, busSelect, InPortData,
+	output reg [31:0] enable, busSelect,
  
-	output [4:0] Control_Signals
+	output reg [4:0] Control_Signals,
  
  
 	//input [31:0] TrueBusMuxOut, OutputUnit,
 	//^ might be wrong
  
-	input wire [31:0] ir, 
+	input wire [31:0] ir, InPortData,
 	
 	input wire CONFFOut, clk, Reset, Stop
+);
+
   
 
 parameter Reset_state= 9'b000000000, fetch0 = 9'b000000001, fetch1 = 9'b000000010, fetch2= 9'b000000011,
@@ -29,16 +31,18 @@ parameter Reset_state= 9'b000000000, fetch0 = 9'b000000001, fetch1 = 9'b00000001
 			 not4 = 9'b000101000, not5 = 9'b000101001, ld3 = 9'b000101010, ld4 = 9'b000101011, ld5 = 9'b000101100, ld6 = 9'b000101101, 
 			 ld7 = 9'b000101110, ldi3 = 9'b000101111, ldi4 = 9'b000110000, ldi5 = 9'b000110001, st3 = 9'b000110010, st4 = 9'b000110011,
 			 st5 = 9'b000110100, st6 = 9'b000110101, addi3 = 9'b000110111, addi4 = 9'b000111000, addi5 = 9'b000111001,
-			 andi3 = 9'b000111010, andi4 = 9'b000111011, andi5 = 9'b000111100, ori3 = 9'b000111101, ori4 = 9'b000111110, ori5 = 9'000111111,
+			 andi3 = 9'b000111010, andi4 = 9'b000111011, andi5 = 9'b000111100, ori3 = 9'b000111101, ori4 = 9'b000111110, ori5 = 9'b000111111,
 			 br3 = 9'b001000000, br4 = 9'b001000001, br5 = 9'b001000010, br6 = 9'b001000011, br7 = 9'b011111111, jr3 = 9'b001000100, jal3 = 9'b001000101, 
 			 jal4 = 9'b001000110, jal5 = 9'b000110110, mfhi3 = 9'b001000111, mflo3 = 9'b001001000, in3 = 9'b001001001, out3 = 9'b001001010, nop3 = 9'b001001011, 
-			 halt3 = 9'b001001100, shra3 = 9'b100000000, shra4 = 9'b100000000, shra5 = 9'b100000000;
+			 halt3 = 9'b001001100, shra3 = 9'b100000000, shra4 = 9'b100000001, shra5 = 9'b100000011;
 	
 
 	reg		[8:0] Present_state = Reset_state;
 
-always @(posedge Clock, posedge Reset, posedge Stop) 
+always @(posedge clk, posedge Reset, posedge Stop) 
 	begin
+			
+	
 		if (Reset == 1'b1) Present_state = Reset_state;
 		if (Stop == 1'b1) Present_state = halt3;
 		else case (Present_state)
@@ -46,11 +50,8 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 			fetch0			:	Present_state = fetch1;
 			fetch1			:	Present_state = fetch2;
 			fetch2			:	begin	
-				
-				
-				                                               //Not sure if this logic is right or there is any logic is needed
-										@(posedge Clock);
-										case	(IR[31:27])
+			@(posedge clk);
+										case	(ir[31:27])
 											5'b00011		:		Present_state=add3;	
 											5'b00100		: 		Present_state=sub3;
 											5'b01110		:		Present_state=mul3;
@@ -78,9 +79,17 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 											5'b10110		:		Present_state=out3;
 											5'b11001		:		Present_state=nop3;
 											5'b11010		:		Present_state=halt3;
-											5'b11111                :               Present_state=shra3;
+											5'b11111    :     Present_state=shra3;
 										endcase
-									end
+										
+										end
+										
+			
+				
+				
+				                                               //Not sure if this logic is right or there is any logic is needed
+								
+									//end
 			
 			add3				: 	Present_state = add4;
 			add4				:	Present_state = add5;
@@ -88,7 +97,7 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 			
 			addi3				: 	Present_state = addi4;
 			addi4				:	Present_state = addi5;
-			addi5 				:	Present_state = fetch0;
+			addi5 		   :	Present_state = fetch0;
 			
 			sub3				: 	Present_state = sub4;
 			sub4				: 	Present_state = sub5;
@@ -97,7 +106,7 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 			mul3				: 	Present_state = mul4;
 			mul4				: 	Present_state = mul5;
 			mul5				: 	Present_state = mul6;
-			mul6                            :	Present_state = fetch0; 
+			mul6           :	Present_state = fetch0; 
 			
 			div3				: 	Present_state = div4;
 			div4				: 	Present_state = div5;
@@ -185,15 +194,15 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 			endcase
 	end
 
-	 always @(present_state) // do the job for each state
+	 always @(Present_state) // do the job for each state
 
 		 begin
  
-			 case (present_state) // assert the required signals in each state
+			 case (Present_state) // assert the required signals in each state
 
-				 reset_state: begin
+				 Reset_state: begin
 					 
-					Run <= 1;
+					run <= 1;
 					 
 					MD_Read <= 0;
 					Gra <= 0;
@@ -206,19 +215,16 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 					ReadRAM <= 0;
 					enable <= 0;
 					busSelect <= 0;
-					InPortData <= 0;
+					//InPortData <= 0;
 					Control_Signals <= 0;
 					
 					
 
- 
- ⁞
-
 				 end
-
+				 
 				 fetch0: begin
 					 
-					 
+					 #0
 					 //PCout 
 					 
 					 busSelect[20] <= 1;
@@ -235,7 +241,7 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 					 
 					 enable[18] <= 1;//Zin
 					
-					#15 busSelect[20] <= 0;
+					#40 busSelect[20] <= 0;
 								
 					 enable[25] <= 0;//MAR
 								
@@ -251,7 +257,7 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 				 fetch1: begin
 					 
 			
-					#10 busSelect[19] <= 1;//zLowOut
+					#0 busSelect[19] <= 1;//zLowOut
 							
 					 enable[20] <= 1;//pcIn
 					 enable[21] <= 1;//MDRin
@@ -259,7 +265,7 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 					 ReadRAM <= 1;
 								
 					
-					 #15 busSelect[19] <= 0;
+					 #40 busSelect[19] <= 0;
 					
 					 busSelect[19] <= 0;
 					
@@ -271,11 +277,11 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 			
 			//busSelect[21] <= 1;
 								
-			#10 enable[21] <= 0; MD_Read <= 0; 
+			#0 enable[21] <= 0; MD_Read <= 0; 
 			
 			busSelect[21] <= 1; enable[24] <= 1;
 			
-			#15 busSelect[21] <= 0; enable[24] <= 0;
+			#40 busSelect[21] <= 0; enable[24] <= 0;
 		end 
 				 
 
@@ -339,14 +345,17 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 								#0 Grb <= 1; BAout <= 1; enable[19] <= 1;//Puts preloaded reg into Yreg
 								#40 Grb <= 0; BAout <= 0; enable[19] <= 0;
 		end
+		
 		st4: begin
 								#0 busSelect[23] <=1; Control_Signals <= 1; enable[18] <= 1;//adds preload reg with immidiate value, stores in Zlow
 								#40 busSelect[23] <=0; Control_Signals <= 0; enable[18] <= 0;
 		end
+		
 		st5: begin
 								#0 busSelect[19] <= 1; enable[25] <= 1;//put Zlow into MAR
 								#40 busSelect[19] <= 0; enable[25] <= 0;
 		end
+		
 		st6: begin
 								#0 Gra <= 1; BAout <= 1; Rout <= 1; WriteRAM <= 1; 
 								#40 Gra <= 0; BAout <= 0; Rout <= 0; WriteRAM <= 0;
@@ -577,7 +586,7 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 		not4: begin
 								#0 busSelect[19] <= 1; Gra <= 1; Rin <= 1;//put Zlow into LO
 								#40 busSelect[19] <= 0; Gra <= 0; Rin <= 0;
-								
+								end
 //Branch
 		br3: begin
 								#0 Gra <= 1; Rout <= 1; enable[27] <= 1;//Puts preloaded reg into CONFF
@@ -645,10 +654,10 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 		
 //out
 		out3: begin
-								#0 Gra <= 1; enable[28] <= 1;  <= 1; //Out
-								#40 Gra <= 0; enable[28] <= 0;  <= 0; //Out
+								#0 Gra <= 1; enable[28] <= 1;  Rout<= 1; //Out
+								#40 Gra <= 0; enable[28] <= 0; Rout <= 0; //Out
 		end
-		
+	
 //nop
 		nop3: begin
 								#0;
@@ -661,9 +670,10 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 		end
 
 			
-			endcase
+			//endcase
 
 		 
-		end
 
+endcase
+end
 	 endmodule 
