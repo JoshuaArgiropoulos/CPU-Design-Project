@@ -46,6 +46,9 @@ always @(posedge Clock, posedge Reset, posedge Stop)
 			fetch0			:	Present_state = fetch1;
 			fetch1			:	Present_state = fetch2;
 			fetch2			:	begin	
+				
+				
+				                                               //Not sure if this logic is right or there is any logic is needed
 										@(posedge Clock);
 										case	(IR[31:27])
 											5'b00011		:		Present_state=add3;	
