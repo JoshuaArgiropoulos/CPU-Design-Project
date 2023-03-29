@@ -1,10 +1,5 @@
 # CPU-Design-Project
 Creating a CPU from the ground up with Liam O'Regan 
 
-The purpose of this project is to design, simulate, implement, and verify a Simple RISC Computer (Mini SRC)
-consisting of a simple RISC processor, memory, and I/O.
+The purpose of the design project is to design, simulate, implement, and verify a simple RISC Computer with a simple RISC processor, memory, and I/O. The project is divided into three phases, with each phase focusing on different aspects of the design and functional simulation of the Mini SRC. In phase 1, the design and functional simulation of the Mini SRC datapath will be performed, which includes add, sub, mul, div, and, or, shr, shra, shl, ror, rol, neg, and not instructions. Phase 2 involves the design and functional simulation of the remaining circuits associated with the Mini SRC datapath, including load/store instructions, branch and jump instructions, and immediate instructions. Phase 3 aims to add and test the Control Unit in Mini SRC. The project requires designing using VHDL or Verilog, and functional simulations will be performed to test the design. The project also mandates the use of advanced multiplication circuitry (32x32 Booth algorithm with bit-pair recoding of multiplier) and prohibits the use of simple arithmetic operators in HDL languages for the Arithmetic Logic Unit (ALU) implementation.
 
-Using the Intel Quartus II design software 
-
-The system is to be implemented on the Cyclone III chip (EP3C16F484) of the DE0 evaluation board
-or on the Cyclone V chip (5CEBA4F23C7) of the DE0-CV evaluation board.
